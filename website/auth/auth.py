@@ -37,7 +37,7 @@ def Validate(token):
     user = AddUser()
     session.clear()
     login_user(user, remember=True)
-    flash(f"Account created successfully. Welcome, {user.username}!", category="success")
+    flash(f"Account created successfully. Welcome, {user.username}! Make sure to update your profile and settings.", category="success")
     return redirect(url_for("mh.Home"))
 
 

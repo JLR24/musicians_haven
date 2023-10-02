@@ -27,6 +27,18 @@ class UserSetting(db.Model):
     messaging = db.Column(db.String(32)) # Anyone can message me, People I follow, No one
     account_type = db.Column(db.String(16)) # Public, Private, Hidden (marked for deletion after 28 days)
     notifications = db.Column(db.String(64)) # 1 for yes, 0 for no: { ... }
+    '''
+    Notification Settings:
+     - [0]: Friend request (accept/new)
+     - [1]: New content approved
+     - [2]: New thread accepted
+     - [3]: Thread post reply
+     - [4]: Thread post like
+     - [5]: Followed thread activity
+     - [6]: New message
+     - [7]: New chat started
+     [ - [8]: Rank change - always on]
+    '''
 
 
 class UserLink(db.Model):

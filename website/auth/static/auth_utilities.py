@@ -69,7 +69,7 @@ def AddUser():
     db.session.add(User(
         username = session["username"],
         email = session["email"],
-        password = generate_password_hash(session["password"], method="sha256"),
+        password = generate_password_hash(session["pw"], method="sha256"),
         editor_score = 0,
         status = "User"
     ))
@@ -83,9 +83,9 @@ def AddUser():
     
     db.session.add(UserSetting(
         user = user.id,
-        messaging = "",
+        messaging = "Anyone can message me",
         account_type = "Private",
-        notifications = ""
+        notifications = "11111111"
     ))
     db.session.commit()
     return user
