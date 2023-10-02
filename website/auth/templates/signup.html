@@ -6,7 +6,7 @@
 
 <h3>Signup</h3>
 
-<form method="POST">
+<form method="POST" action="{{url_for('auth.HandleSignup')}}">
     <h5>Already have an account? <a href="/auth/login">Click here</a> to login.</h5><br>
     <div class="form-group">
         <label for="un">Enter your username</label>

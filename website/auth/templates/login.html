@@ -4,7 +4,7 @@
 
 {% block content %}
 
-    <form method="POST">
+    <form method="POST" action="{{url_for('auth.HandleLogin')}}">
         <h5>Don't have an account yet? <a href="/auth/signup">Click here</a> to sign up.</h5><br>
         <div class="form-group">
             <label for="key">Enter your email or username</label>

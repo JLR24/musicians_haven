@@ -1,4 +1,4 @@
-from flask import redirect, url_for, flash, render_template
+from flask import redirect, url_for, flash
 from website import CreateApp, GetNotifications
 
 app = CreateApp()
