@@ -164,4 +164,3 @@ database.db
 alembic.ini
 env.py
 script.py.mako
-README
