@@ -1,0 +1,63 @@
+
+.navbar{
+    background-color: #262834;
+    color: white;
+}
+
+.second_navbar{
+    background-color: #656565;
+    color: white;
+}
+
+.navbar ul{
+    list-style-type: none;
+    margin:0;
+    overflow: hidden;
+}
+
+.navbar li {
+    display: inline;
+    float: left;
+}
+
+.menu{
+    display: inline;
+    gap: 1em;
+    font-size:18px;
+}
+
+.nav-links a{
+    display: block;
+    padding: 8px;
+    background-color: #262834;
+    text-decoration: none;
+    text-align: center;
+    padding: 14px 16px;
+    text-decoration: none;
+    color: white;
+    border-radius: 10px;
+}
+
+.second-nav-links a{
+    display: block;
+    padding: 8px;
+    background-color: #656565;
+    text-decoration: none;
+    text-align: center;
+    padding: 14px 16px;
+    text-decoration: none;
+    color: white;
+    border-radius: 10px;
+}
+
+.nav-links a:hover{
+    background-color: red;
+}
+
+
+.formList {
+    border: 1px solid black;
+    border-radius: 5px;
+    padding: 10px;
+    margin: 5px;
+}

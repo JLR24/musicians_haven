@@ -1,0 +1,37 @@
+{% extends "base.html" %}
+
+{% block title %} Signup {% endblock %}
+
+{% block content %}
+
+<h3>Signup</h3>
+
+<form method="POST">
+    <h5>Already have an account? <a href="/auth/login">Click here</a> to login.</h5><br>
+    <div class="form-group">
+        <label for="un">Enter your username</label>
+        <input type="text" class="form-control" id="un" name="un" placeholder="Enter your username" required autofocus>
+        <small class="form-text text-muted">This is the name you will be known by on the platform</small>
+    </div>
+    <div class="form-group">
+        <label for="email">Enter your email</label>
+        <input type="text" class="form-control" id="email" name="email" placeholder="Enter your email" required>
+        <small class="form-text text-muted">You will need access to this to verify the email address</small>
+    </div><br>
+
+    <div class="form-group">
+        <label for="password">Enter your password</label>
+        <input type="password" class="form-control" id="pw1" name="pw1" placeholder="Enter your password" required>
+        <small class="form-text text-muted">Passwords must be at least 8 characters, contain at least one number, one lowercase character, and one uppercase character</small>
+    </div>
+    <div class="form-group">
+        <label for="password">Confirm your password</label>
+        <input type="password" class="form-control" id="pw2" name="pw2" placeholder="Enter your password" required>
+    </div>
+    <br>
+    <button type="submit" class="btn btn-outline-success" onclick="CheckPassword()">Signup</button>
+</form>
+
+<script src="{{url_for('auth.static', filename='password_checker.js')}}"></script>
+
+{% endblock %}

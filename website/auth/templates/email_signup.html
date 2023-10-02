@@ -1,0 +1,17 @@
+<div style="text-align: center; border:1px solid #383737; padding: 10px;">
+    <h1>Hello, {{username}}</h1>
+    <hr>
+    <h3>Account Verification Link:</h3>
+
+    <p>Someone has used your email to sign up to Musician's Haven. <br> If this was not you, then please ignore this email.</p>
+
+    <br><hr><br>
+
+    <p>If it <i>was</i> you, then please follow this single-use link to activate your account: <a style="color:red;" href="http://127.0.0.1:5000/auth/validate/{{token}}">http://127.0.0.1:5000/auth/validate/{{token}}</a></p>
+
+    <br>
+    <p>Remember, don't share this link with <strong>anyone</strong> and <strong>do NOT</strong> click this link if you didn't request this email! This pin will remain valid for 10 minutes.</p>
+
+    <br>
+    <p>Kind regards, <br> The Musician's Haven Team</p>
+</div>

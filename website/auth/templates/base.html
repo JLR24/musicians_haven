@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- Bootstrap Links -->
+    <link
+        rel="stylesheet"
+        href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
+        integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh"
+        crossorigin="anonymous"/>
+    <link
+        rel="stylesheet"
+        href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css"
+        crossorigin="anonymous"/>
+
+    <link rel="stylesheet" href="{{url_for('auth.static', filename='base.css')}}">
+    
+
+    <title>{% block title %} {% endblock %}</title>
+</head>
+<body>
+    <!-- Navbar -->
+    <div class="navbar">
+        <div class="menu">
+        <ul class="nav-links">
+            <li><a href="/">Home</a></li>
+            <li><a href="/">Discover</a></li>
+            <li><a href="/">Learn</a></li>
+            {% if user.is_authenticated %}
+                <li><a href="/">Social</a></li>
+                <li><a href="/">Profile</a></li>
+            {% endif %}
+            <li><a href="/">Help</a></li>
+            {% if user.rank == "Admin" %}
+                <li><a href="/">Admin</a></li>
+            {% endif %}
+            {% if user.is_authenticated %}
+                <li><a href="/auth/logout">Logout</a></li>
+            {% else %}
+                <li><a href="/auth/login">Login</a></li>
+                <li><a href="/auth/signup">Signup</a></li>
+            {% endif %}
+        </ul>
+        </div>
+    </div>
+
+    <!-- Second Navbar -->
+    <div style="padding: 0px 30px">
+        {% block second_nav %}
+        {% endblock %}
+    </div>
+
+    <!-- Content -->
+    <div style="border: 1px solid black; padding: 40px; border-top: 0px; margin: 30px; margin-top: 0;background-color: white;">
+        <!-- Flash messages to the user -->
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                {% for category, message in messages %}
+                    {% if category == "error" %}
+                        <div class="alert alert-danger alert-dismissible fade show" role="alert">{{message}}
+                        <button type="button" class="close" data-dismiss="alert">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                        </div>
+                    {% elif category == "success" %}
+                    <div class="alert alert-success alert-dismissible fade show" role="alert">{{message}}
+                        <button type="button" class="close" data-dismiss="alert">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    {% else %}
+                    <div class="alert alert-primary alert-dismissible fade show" role="alert">{{message}}
+                        <button type="button" class="close" data-dismiss="alert">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    {% endif %}
+                {% endfor %}
+            {% endif %}            
+        {% endwith %}
+
+        <!-- Page contents -->
+        <div class="container" style="height: 100%; padding: 10px; padding-bottom: 40vh;">
+            {% block content %}
+            {% endblock %}
+            <br><br>
+        </div>
+    </div>
+
+    <!-- Bootstrap JS links -->
+    <script
+        src="https://code.jquery.com/jquery-3.2.1.slim.min.js"
+        integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN"
+        crossorigin="anonymous"></script>
+    <script
+        src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"
+        integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
+        crossorigin="anonymous"></script>
+    <script
+        src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"
+        integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
+        crossorigin="anonymous"></script>
+
+    <script>
+        // Reloads the page when the user presses the back button.
+        window.addEventListener( "pageshow", function ( event ) {
+        var reload = event.persisted || ( typeof window.performance != "undefined" && window.performance.navigation.type === 2 );
+        if ( reload ) {
+            window.location.reload();
+        }
+        });
+    </script>
+</body>
+</html>
