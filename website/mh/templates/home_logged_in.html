@@ -1,0 +1,68 @@
+{% extends "base.html" %}
+
+{% block title %} MH Home {% endblock %}
+
+{% block content %}
+
+    <h1>Welcome to Musician's Haven!</h1><br>
+
+    <div class="threadScrollBar">
+        {% if user.FollowsThreads() %}
+            {% for tLink in user.GetFollowedThreadLinks() %}
+                {% if tLink.UserLastSeen() %}
+                    <a class="threadItem" style="color: #3363ff;;" href="/mh/social/thread/{{tLink.id}}">{{tLink.name}}</a>
+                {% else %}
+                    <a class="threadItem" style="color: #fd004c;" href="/mh/social/thread/{{thread.id}}">{{tLink.name}} *</a>
+                {% endif %}
+            {% endfor %}
+            <a class="threadItem" href="/mh/social/thread/" style="color:#b102b7; text-decoration: underline; font-style: italic; margin-left: 25px;">Find more threads!</a>
+        {% else %}
+            <div style="text-align: center;">
+                <a class="threadItem" style="color: #3363ff">You don't follow any threads yet:</a>
+                <a class="threadItem" href="/mh/social/forum" style="color:#fd004c; text-decoration: underline; font-style: italic;">Click here to find some threads!</a>
+            </div>
+        {% endif %}
+    </div>
+    <hr style="border-top: 1px solid black;"><br>
+
+    <div style="text-align: center;">
+        {% if p.list | length > 0 %}
+            {% for post in p.GetPage(page | int) %}
+            <div class="outer0">
+                <div class="inner">
+                    <div class="image"><img class="p-img" src=""></div>
+                    <p data-toggle="tooltip" data-placement="top" title="Date posted: {{post.date.strftime('%d/%m/%Y, %H:%M')}}" style="font-size: 15px; letter-spacing: 2px; text-overflow: ellipsis;">
+                        <a href="/mh/profile/{{post.user}}#{{post.id}}">{{user.username}}:</a> {{post.caption}}
+                    </p>
+                </div>
+            </div>
+            <!-- For images, consider: https://www.w3schools.com/css/css3_object-fit.asp -->
+            {% endfor %}
+            <br>
+            <div style="text-align: center;">
+                {% if p.HasPrev(p.current) %}
+                    <a class="btn btn-outline-info" href="/mh/?page={{p.current - 1}}" style="margin-right: 5px;">&lt;&lt;&lt; Back</a>
+                {% else %}
+                    <a class="btn btn-outline-secondary disabled" href="/mh/?page={{p.current - 1}}" style="margin-right: 5px;">&lt;&lt;&lt; Back</a>
+                {% endif %}
+                {% if p.HasNext(p.current) %}
+                    <a class="btn btn-outline-info" href="/mh/?page={{p.current + 1}}" style="margin-left: 5px;">Next &gt;&gt;&gt;</a>
+                {% else %}
+                    <a class="btn btn-outline-secondary disabled" href="/mh/?page={{p.current + 1}}" style="margin-left: 5px;">Next &gt;&gt;&gt;</a>
+                {% endif %}
+            </div>
+        {% else %}
+            <div class="outer1">
+                <div class="inner">
+                    <p>Your feed is empty! Click <a href="/mh/social/">here</a> to find new profiles to follow!</p>
+                </div>
+            </div>
+            <div class="outer2">
+                <div class="inner">
+                    <p>Click <a href="/mh/profile/">here</a> to upload some posts of your own!</p>
+                </div>
+            </div>
+        {% endif %}
+    </div>
+
+{% endblock %}

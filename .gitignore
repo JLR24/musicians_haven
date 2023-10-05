@@ -160,7 +160,11 @@ cython_debug/
 #.idea/
 
 # Custom: Database
+migrations/
 database.db
 alembic.ini
 env.py
 script.py.mako
+.DS_Store
+
+user_static/

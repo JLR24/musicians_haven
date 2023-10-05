@@ -1,0 +1,44 @@
+{% extends "base.html" %}
+
+{% block title %} MH Home {% endblock %}
+
+{% block content %}
+
+<h1>Welcome to Musician's Haven!</h1><br>
+
+<div style="text-align: center;">
+    <div class="outer1">
+        <div class="inner">
+            <p>To see recent posts, make sure to <a href="/auth/login">login</a>.</p>
+        </div>
+    </div>
+    <div class="outer2">
+        <div class="inner">
+            <p>Don't have an account yet? Sign up <a href="/auth/signup">here</a>.</p>
+        </div>
+    </div>
+    <div class="outer3">
+        <div class="inner">
+            <p>We have a plethora of songs on our site!</p><p>Click <a href="/mh/learn/">here</a> to find out more.</p>
+        </div>
+    </div>
+    <div class="outer2">
+        <div class="inner">
+            <p>Looking for a band? Sign up and user our <a href="/mh/discover/band">Discover</a> tool!</p>
+        </div>
+    </div>
+    <div class="outer3">
+        <div class="inner">
+            <p>Want to learn more about music? Check out our <a href="/mh/learn/courses">free courses</a>!</p>
+        </div>
+    </div>
+    <div class="outer1">
+        <div class="inner">
+            <p>Ask for help on our <a href="/mh/social/forum">forum pages</a>, or send messages to friends!</p>
+        </div>
+    </div>
+    <br>
+    <p><a style="color:#fd004c" href="/auth/login">Log In</a> or <a style="color:#fd004c" href="/auth/signup">Sign Up</a> to access all of these features and more!</p>
+</div>
+
+{% endblock %}

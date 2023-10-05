@@ -2,6 +2,8 @@
 .navbar{
     background-color: #262834;
     color: white;
+    border-bottom-left-radius: 15px;
+    border-bottom-right-radius: 15px;
 }
 
 .second_navbar{
@@ -60,4 +62,11 @@
     border-radius: 5px;
     padding: 10px;
     margin: 5px;
+}
+
+
+.backgroundBorder {
+    /* background-color: black; */
+    /* background-image: radial-gradient(black, white); */
+    background-image: radial-gradient(rgba(0, 0, 0, 0.2), black);
 }

@@ -20,6 +20,42 @@ class User(db.Model, UserMixin):
     band_status = db.Column(db.String(128)) # Either "Looking", "In a band", "In a band, but may possibly join another", or "Not interested".
     status = db.Column(db.String(1024)) # Admin, User, Banned (+ reason), Suspended (+ reason)
 
+    def GetPosts(self):
+        '''Returns a list of the user's posts ordered by date.'''
+        return (sorted(UserPost.query.filter_by(user=self.id).all(), key=lambda i: i.date)).reverse()
+    
+    def GetFriendLinks(self):
+        '''Returns a list of friend links.'''
+        return UserLink.query.filter(UserLink.user1==self.id or UserLink.user2==self.id).all()
+    
+    def GetFriends(self):
+        '''Returns a list of the user's friends.'''
+        links = sorted(self.GetFriendLinks(), key=lambda i: i.date)
+        results = []
+        for link in links:
+            if link.user1 != self.id:
+                results.append(link.user1)
+            else:
+                results.append(link.user2)
+        return results
+    
+    def GetFeed(self):
+        '''Returns the list of posts to appear in the user's feed.'''
+        posts = []
+        for user in self.GetFriends():
+            posts.append(user.GetPosts())
+        return sorted(posts, key=lambda i: i.date).reverse()
+    
+    def FollowsThreads(self):
+        '''Returns True if the user follows any threads, False otherwise'''
+        if ThreadFollow.query.filter_by(user=self.id).first():
+            return True
+        return False
+    
+    def GetFollowedThreadLinks(self):
+        '''Returns a list of the user's followed threads'''
+        return ThreadFollow.query.filter_by(user=self.id).all()
+
 
 class UserSetting(db.Model):
     user = db.Column(db.Integer, db.ForeignKey("user.id"), primary_key=True)
@@ -45,6 +81,7 @@ class UserLink(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     user1 = db.Column(db.Integer, db.ForeignKey("user.id"))
     user2 = db.Column(db.Integer) # Other user's profile
+    date = db.Column(db.DateTime(timezone=True), default=func.now())
     status = db.Column(db.String(16)) # Request, Follow, Block, Star
     # Before adding another link between two users, check/update an existing link as required (new block => remove follow (actually update the "status" field))
 
@@ -246,6 +283,7 @@ class Thread(db.Model):
     date_created = db.Column(db.DateTime(timezone=True), default=func.now())
     info = db.Column(db.String(4096))
     tags = db.Column(db.String(4096))
+    post_count = db.Column(db.Integer)
     state = db.Column(db.String(16))
 
 
@@ -254,6 +292,17 @@ class ThreadFollow(db.Model):
     thread = db.Column(db.Integer, db.ForeignKey("thread.id"))
     user = db.Column(db.Integer, db.ForeignKey("user.id"))
     date = db.Column(db.DateTime(timezone=True), default=func.now())
+    last_seen = db.Column(db.Integer)
+
+    def GetThread(self):
+        '''Returns the associated thread'''
+        return Thread.query.filter_by(id=self.thread).first()
+    
+    def UserLastSeen(self):
+        '''Returns True if the user has seen the last post, False otherwise'''
+        if self.last_seen == self.GetThread().post_count:
+            return True
+        return False
 
 
 class ThreadPost(db.Model):
@@ -262,6 +311,7 @@ class ThreadPost(db.Model):
     thread = db.Column(db.Integer, db.ForeignKey("thread.id"))
     date = db.Column(db.DateTime(timezone=True), default=func.now())
     content = db.Column(db.String(16384))
+    number = db.Column(db.Integer)
     reply = db.Column(db.Integer, db.ForeignKey("thread_post.id")) # None for not a reply, postID for a reply to that post.
 
 

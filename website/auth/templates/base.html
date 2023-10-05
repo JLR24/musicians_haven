@@ -15,12 +15,17 @@
         href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css"
         crossorigin="anonymous"/>
 
+    <!-- Widgets -->
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@500&display=swap" rel="stylesheet">
+
     <link rel="stylesheet" href="{{url_for('auth.static', filename='base.css')}}">
+    <link rel="stylesheet" href="{{url_for('mh.static', filename='home.css')}}">
     
 
     <title>{% block title %} {% endblock %}</title>
 </head>
-<body>
+<body style="font-family: 'Poppins',sans-serif;" class="backgroundBorder">
     <!-- Navbar -->
     <div class="navbar">
         <div class="menu">
