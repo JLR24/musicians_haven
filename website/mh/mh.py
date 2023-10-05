@@ -20,3 +20,14 @@ def Home():
         return render_template("home_logged_in.html", user=current_user, p=p, page=page)
     return render_template("home_logged_out.html", user=current_user)
     
+
+@mh.route("/about")
+def About():
+    '''This page displays the "about the site" information to the user'''
+    return render_template("about.html")
+
+
+@mh.route("/thanks")
+def Thanks():
+    '''This page displays the "special thanks" information to the user'''
+    return render_template("thanks.html")
