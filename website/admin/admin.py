@@ -20,11 +20,20 @@ def Home():
 @admin.route("/bans")
 @login_required
 def Bans():
-    '''This function displays the admin ban page'''
+    '''This page displays the admin ban page'''
     if not IsAdmin():
         return redirect(url_for("home.Home"))
     banned = GetBanned()
     return render_template("admin_ban.html", user=current_user, active="Bans", banned=banned)
+
+
+# @admin.route("/logs")
+# @login_required
+# def Logs():
+#     '''This page allows the admins to view and filter logs'''
+#     if not IsAdmin():
+#         return redirect(url_for("home.Home"))
+#     return render_template("admin_logs.html", user=current_user, active="Logs")
 
 
 @admin.route("/HandleAdminPromote", methods=["POST"])

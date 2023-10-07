@@ -332,9 +332,13 @@ class Log(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     user = db.Column(db.Integer, db.ForeignKey("user.id"))
     date = db.Column(db.DateTime(timezone=True), default=func.now())
-    type = db.Column(db.String(32))
+    type = db.Column(db.String(32)) # User Search, Song Search, Thread Search, 
     content = db.Column(db.String(8192))
     state = db.Column(db.String(16)) # N/A, Hidden
+
+    def GetUser(self):
+        '''Returns the User associated with the Log'''
+        return User.query.filter_by(id=self.user).first()
 
 
 class Notification(db.Model):

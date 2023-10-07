@@ -1,0 +1,40 @@
+{% extends "admin_base.html" %}
+
+{% block title %} Admin Logs {% endblock %}
+
+{% block content %}
+
+    <h1>Admin Logs Page</h1><br>
+
+    <div class="formList">
+        <h3>Filter Logs:</h3>
+        
+        <div class="form-group" style="padding: 5px 15px;">
+            <label>Log Type:</label><br>
+            <input type="radio" name="withdrawn" value="false" checked>
+            <label for="withdrawn">No</label>
+            <br>
+            <input type="radio" name="withdrawn" value="true">
+            <label for="withdrawn">Yes</label>
+        </div>
+
+    </div>
+    <br><hr><br>
+    <table style="width: 100%; border: 1px solid black; text-align: center;" class="table table-bordered">
+        <thead class="table table-dark">
+            <th>User</th>
+            <th>Log Type</th>
+            <th>Date</th>
+            <th>Content</th>
+        </thead>
+        {% for log in logs %}
+            <tr>
+                <td>{{log.GetUser().username}}</td>
+                <td>{{log.type}}</td>
+                <td>{{log.date.strftime("%d/%m/%Y, %H:%M")}}</td>
+                <td>{{log.content}}</td>
+            </tr>
+        {% endfor %}
+    </table>
+
+{% endblock %}
