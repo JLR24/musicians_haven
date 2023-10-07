@@ -58,7 +58,7 @@ def Banned():
     if not user or not user.status[0] == "B":
         return redirect(url_for("auth.Login"))
     try:
-        reason = user.status[8:]
+        reason = user.GetBanReason()
         return render_template("banned.html", user=current_user, reason=reason)
     except:
         return redirect(url_for("auth.Login"))

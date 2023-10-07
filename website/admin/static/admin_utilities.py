@@ -28,3 +28,8 @@ def GetMax(input):
         if i != None and len(i) > m:
             m = len(i)
     return m
+
+
+def GetBanned():
+    '''Returns a list of all banned users'''
+    return User.query.filter(User.status.startswith("b")).all()

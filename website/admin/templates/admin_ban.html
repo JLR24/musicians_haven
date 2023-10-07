@@ -6,5 +6,36 @@
 
     <h1>Admin Ban Page</h1><br>
 
+    <form method="POST" action="{{url_for('admin.HandleBan')}}">
+        <span>Ban a user: </span>
+        <input type="text" name="username" placeholder="Enter their username...">
+        <input type="text" name="reason" placeholder="Reason for banning...">
+        <input type="submit" value="Ban" style="color: limegreen; background-color: transparent; border: 1px solid black; border-radius: 5px;">
+    </form>
+    <br>
+
+    {% if banned %}
+        <hr><br>
+        <table style="width: 100%; border: 1px solid black; text-align: center;" class="table table-bordered">
+            <thead class="table table-dark">
+                <th>User</th>
+                <th>Reason for Ban</th>
+                <th>Pardon?</th>
+            </thead>
+            {% for i in banned %}
+                <tr>
+                    <td>{{i.username}}</td>
+                    <td>{{i.GetBanReason()}}</td>
+                    <td>
+                        <form method="POST" action="{{url_for('admin.HandlePardon')}}">
+                            <input type="hidden" value="{{i.username}}" name="username">
+                            <input type="submit" value="Pardon" style="color: limegreen; background-color: transparent; border: 1px solid black; border-radius: 5px;">
+                        </form>
+                    </td>
+                </tr>
+            {% endfor %}
+        </table>
+    {% endif %}
+
 
 {% endblock %}

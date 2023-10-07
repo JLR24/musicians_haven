@@ -55,6 +55,10 @@ class User(db.Model, UserMixin):
     def GetFollowedThreadLinks(self):
         '''Returns a list of the user's followed threads'''
         return ThreadFollow.query.filter_by(user=self.id).all()
+    
+    def GetBanReason(self):
+        '''Returns a string containing the reason for the user's ban'''
+        return self.status[8:]
 
 
 class UserSetting(db.Model):
