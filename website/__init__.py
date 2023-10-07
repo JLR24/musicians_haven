@@ -20,9 +20,11 @@ def CreateApp():
     migrate = Migrate(app, db)
 
     from .auth.auth import auth
+    from .admin.admin import admin
     from .mh.mh import mh
 
     app.register_blueprint(auth, url_prefix="/auth")
+    app.register_blueprint(admin, url_prefix="/admin")
     app.register_blueprint(mh, url_prefix="/mh")
 
     from .models import User

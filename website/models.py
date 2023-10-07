@@ -18,7 +18,7 @@ class User(db.Model, UserMixin):
     place_of_work = db.Column(db.String(512))
     editor_score = db.Column(db.Integer)
     band_status = db.Column(db.String(128)) # Either "Looking", "In a band", "In a band, but may possibly join another", or "Not interested".
-    status = db.Column(db.String(1024)) # Admin, User, Banned (+ reason), Suspended (+ reason)
+    status = db.Column(db.String(1024)) # Admin, User, Editor, Banned (+ reason), Suspended (+ reason)
 
     def GetPosts(self):
         '''Returns a list of the user's posts ordered by date.'''

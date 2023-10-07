@@ -40,8 +40,8 @@
                 <li><a href="/">Profile</a></li>
             {% endif %}
             <li><a href="/">Help</a></li>
-            {% if user.rank == "Admin" %}
-                <li><a href="/">Admin</a></li>
+            {% if user.status == "Admin" %}
+                <li><a href="/admin/">Admin</a></li>
             {% endif %}
             {% if user.is_authenticated %}
                 <li><a href="/auth/logout">Logout</a></li>
@@ -111,7 +111,12 @@
         crossorigin="anonymous"></script>
 
     <script>
-        // Reloads the page when the user presses the back button.
+        // Logs user out if they've been banned:
+        if ("{{user.status}}"[0] == "B") {
+            window.location.href = "/auth/logout";
+        }
+
+        // Reloads the page when the user presses the back button:
         window.addEventListener( "pageshow", function ( event ) {
         var reload = event.persisted || ( typeof window.performance != "undefined" && window.performance.navigation.type === 2 );
         if ( reload ) {

