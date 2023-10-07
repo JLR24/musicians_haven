@@ -70,3 +70,7 @@
     /* background-image: radial-gradient(black, white); */
     background-image: radial-gradient(rgba(0, 0, 0, 0.2), black);
 }
+
+.activeNav {
+    background-color: red;
+}

@@ -1,0 +1,19 @@
+{% extends "base.html" %}
+
+{% block second_nav %} 
+
+    <div class="navbar second_navbar" style="border-bottom: 2px solid black;">
+        <div class="menu">
+            <ul class="nav-links second-nav-links">
+                <li><a href="/admin/" {% if active == "Dashboard" %} style="color: black;" {% endif %}>Dashboard</a></li>
+                <li><a href="/admin/bans" {% if active == "Bans" %} style="color: black;" {% endif %}>Bans</a></li>
+                <li><a href="/admin/reports" {% if active == "Reports" %} style="color: black;" {% endif %}>Reports</a></li>
+                <li><a href="/admin/logs" {% if active == "Logs" %} style="color: black;" {% endif %}>Logs</a></li>
+                <li><a href="/admin/content" {% if active == "Content" %} style="color: black;" {% endif %}>Content Approval</a></li>
+                <li><a href="/admin/help" {% if active == "Help" %} style="color: black;" {% endif %}>Help Responses</a></li>
+                <li><a href="/admin/news" {% if active == "News" %} style="color: black;" {% endif %}>Add News</a></li>
+            </ul>
+        </div>
+    </div>
+
+{% endblock %}

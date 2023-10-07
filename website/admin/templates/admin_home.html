@@ -1,4 +1,4 @@
-{% extends "base.html" %}
+{% extends "admin_base.html" %}
 
 {% block title %} Admin Home {% endblock %}
 
@@ -6,5 +6,49 @@
 
     <h1>Admin Dashboard</h1><br>
 
+        <table style="width: 50%; border: 1px solid black; text-align: center; float: left;" class="table table-bordered">
+            <thead class="table table-dark">
+                <th>Current Admins</th>
+                <th>Current Editors</th>
+            </thead>
+            {% for n in range(m) %}
+                <tr>
+                    <td>{% if admins | length > n %} <a href="/social/profile/{{admins[n].id}}">{{admins[n].username}}</a> {% endif %}</td>
+                    <td>{% if editors | length > n %} <a href="/social/profile/{{editors[n].id}}">{{editors[n].username}}</a> {% endif %}</td>
+                </tr>
+            {% endfor %}
+        </table>
+
+        <div style="float: right; padding-right: 5%; border-left: 0.5px solid black; padding-left: 5px;">
+            <p>Add New Admin: 
+                <form method="POST" action="{{url_for('admin.HandleAdminPromote')}}">
+                    <input type="text" name="username" placeholder="Enter their username...">
+                    <input type="submit" value="Promote" style="color: limegreen; background-color: transparent; border: 1px solid black; border-radius: 5px;">
+                </form>
+            </p>
+            <hr style="border-top: 1px solid black;">
+            <p>Remove Existing Admin: 
+                <form method="POST" action="{{url_for('admin.HandleAdminDemote')}}">
+                    <input type="text" name="username" placeholder="Enter their username...">
+                    <input type="submit" value="Promote" style="color: limegreen; background-color: transparent; border: 1px solid black; border-radius: 5px;">
+                </form>
+            </p>
+            <hr style="border-top: 2px solid black;">
+            <p>Add New Editor: 
+                <form method="POST" action="{{url_for('admin.HandleEditorPromote')}}">
+                    <input type="text" name="username" placeholder="Enter their username...">
+                    <input type="submit" value="Promote" style="color: limegreen; background-color: transparent; border: 1px solid black; border-radius: 5px;">
+                </form>
+            </p>
+            <hr style="border-top: 1px solid black;">
+            <p>Remove Existing Editor: 
+                <form method="POST" action="{{url_for('admin.HandleEditorDemote')}}">
+                    <input type="text" name="username" placeholder="Enter their username...">
+                    <input type="submit" value="Promote" style="color: limegreen; background-color: transparent; border: 1px solid black; border-radius: 5px;">
+                </form>
+            </p>
+        </div>
+        <br><br>
+    </div>
 
 {% endblock %}
