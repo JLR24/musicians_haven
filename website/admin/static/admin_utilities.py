@@ -1,6 +1,9 @@
-from flask import flash
+from flask import flash, render_template
 from flask_login import current_user
 from ...models import db, User
+from ... import mail
+from flask_mail import Message
+import datetime
 
 
 def IsAdmin():
@@ -33,3 +36,21 @@ def GetMax(input):
 def GetBanned():
     '''Returns a list of all banned users'''
     return User.query.filter(User.status.startswith("b")).all()
+
+
+def EmailHelpResponse(help, response):
+    '''This function emails the response to the user'''
+    try:
+        # Define email details
+        msg = Message("Musician's Haven Query - Response",
+            sender = ("Musician's Haven", "musicians.haven.app@gmail.com"),
+            recipients = [(help.email)]
+        )
+        msg.body = f"Response: {response}"
+        msg.html = render_template("email_response.html", response=response, help=help, current_date=datetime.datetime.today().strftime('%d/%m/%Y'), user=current_user)
+        mail.send(msg)
+        return True
+    except Exception as e:
+        # If the process fails (most likely an account login failure)...
+        flash(f'Mail send failure - - "{str(e)}" - - Please try again...', category="error")
+        return False

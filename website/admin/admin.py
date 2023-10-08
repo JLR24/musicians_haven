@@ -1,7 +1,7 @@
 from flask import Blueprint, render_template, url_for, redirect, flash, request
 from flask_login import current_user, login_required
-from ..models import db, User
-from .static.admin_utilities import IsAdmin, GetAdmins, GetEditors, GetMax, GetBanned
+from ..models import db, User, Help
+from .static.admin_utilities import IsAdmin, GetAdmins, GetEditors, GetMax, GetBanned, EmailHelpResponse
 
 admin = Blueprint("admin", __name__, template_folder="templates", static_folder="static")
 
@@ -23,8 +23,17 @@ def Bans():
     '''This page displays the admin ban page'''
     if not IsAdmin():
         return redirect(url_for("home.Home"))
-    banned = GetBanned()
-    return render_template("admin_ban.html", user=current_user, active="Bans", banned=banned)
+    return render_template("admin_ban.html", user=current_user, active="Bans", banned=GetBanned())
+
+
+@admin.route("/help")
+@login_required
+def HelpResponse():
+    '''This page displays the admin help response page'''
+    if not IsAdmin():
+        return redirect(url_for("home.Home"))
+    response = request.args.get("r")
+    return render_template("admin_help.html", user=current_user, active="Help", queries=Help.query.all(), response=response)
 
 
 # @admin.route("/logs")
@@ -140,3 +149,23 @@ def HandlePardon():
     db.session.commit()
     flash("User successfully pardoned!", category="success")
     return redirect(url_for("admin.Bans"))
+
+
+@admin.route("/HandleHelpResponse", methods=["POST"])
+@login_required
+def HandleHelpResponse():
+    '''This page handles the response to a help query'''
+    if not IsAdmin():
+        return redirect(url_for("home.Home"))
+    help = Help.query.filter_by(id=request.form.get("id")).first()
+    if not help:
+        flash("Invalid details!", category="error")
+        return redirect(url_for("admin.Home"))
+    response = request.form.get("response")
+    if not EmailHelpResponse(help, response):
+        flash("Error sending email, please try again")
+        return redirect(url_for("admin.HelpResponse", r=response))
+    # Delete Help object from db
+    db.session.delete(help)
+    db.session.commit()
+    return redirect(url_for("admin.HelpResponse"))

@@ -1,0 +1,28 @@
+{% extends "admin_base.html" %}
+
+{% block title %} Admin Help {% endblock %}
+
+{% block content %}
+
+    <h1>Admin Help Query Response Page</h1><br>
+
+    {% if queries %}
+        {% for query in queries %}
+            <div class="formList">
+                <form method="POST" action="{{url_for('admin.HandleHelpResponse')}}">
+                    <p><span style="font-weight: bold;">Query: </span>{{query.question}}</p>
+                    <input type="hidden" name="id" value="{{query.id}}">
+                    <div class="form-group">
+                        <label for="response">Enter Response</label>
+                        <textarea name="response" placeholder="Enter your response..." class="form-control" rows="3" required>{% if response %}{{response}}{% endif %}</textarea>
+                    </div>
+                    <input type="submit" value="Submit Response" class="btn btn-outline-success">
+                </form>
+            </div>
+            <br>
+        {% endfor %}
+    {% else %}
+            <p>No outstanding queries!</p>
+    {% endif %}
+
+{% endblock %}

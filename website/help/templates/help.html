@@ -1,0 +1,42 @@
+{% extends "help_base.html" %}
+
+{% block title %} Help Pages {% endblock %}
+
+{% block content %}
+
+    <h1>Help Pages / Site Map</h1><br>
+
+    <table style="width: 100%; border: 1px solid black; text-align: center;" class="table table-bordered">
+        <thead class="table table-dark">
+            <th>Site Section</th>
+            <th>Details</th>
+        </thead>
+        <tbody>
+            <tr>
+                <td><a href="/mh/">Home</a></td>
+                <td>This is the site home page. Here you can view your feed and other important content.</td>
+            </tr>
+            <tr>
+                <td><a href="/mh/discover">Discover</a></td>
+                <td>These pages contain the Band Pages, music recommendations, and any news articles published to MH.</td>
+            </tr>
+            <tr>
+                <td><a href="/mh/learn">Learn</a></td>
+                <td>These pages contain the site's music information. Additionally, you can also view free courses and practice tools here.</td>
+            </tr>
+            <tr>
+                <td><a href="/mh/social">Social</a></td>
+                <td>These pages contain the site's social features, such as user profiles, messaging, and forums.</td>
+            </tr>
+            <tr>
+                <td><a href="/mh/profile/{{user.id}}">Profile</a></td>
+                <td>This page allows you to view and edit your profile, including managing your account settings.</td>
+            </tr>
+            <tr>
+                <td><a href="/help/">Help Pages</a></td>
+                <td>This is where you currently are. These pages contain the site map, FAQs, and a contact form if you still require further help.</td>
+            </tr>
+        </tbody>
+    </table>
+
+{% endblock %}

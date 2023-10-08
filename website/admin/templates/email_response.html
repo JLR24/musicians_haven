@@ -1,0 +1,25 @@
+<div style="text-align: center; border:1px solid #383737; background-color: white; color: black;">
+    <h1>Hey!</h1>
+    <hr>
+    <h3>A member of our support team has responded to your query:</h3>
+
+    <p>On {{help.date.strftime("%d/%m/%Y")}}, you wrote: </p>
+    <div style="padding: 10px; margin: 10px 50px; border: 1px solid black; background-color:azure;">
+        <p>{{help.question}}</p>
+    </div>
+
+    <br><hr><br>
+
+    <p>A member of our team (ID Number: {{user.id}}) responded to your question on {{current_date}}:</p>
+    <div style="padding: 10px; margin: 10px 50px; border: 1px solid black; background-color: azure;">
+        <p>{{response}}</p>
+    </div>
+
+    <br><hr><br>
+
+    <p>We hope that this helps with your query! If you still need further help, please don't hesitate to contact us again!</p>
+
+    <br>
+    <p>Kind regards, <br> The Musician's Haven Team</p>
+    <small>Please do not reply to this email, as the account is unmonitored!</small>
+</div>

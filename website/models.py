@@ -354,7 +354,7 @@ class Help(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     email = db.Column(db.String(320))
     date = db.Column(db.DateTime(timezone=True), default=func.now())
-    query = db.Column(db.String(8192))
+    question = db.Column(db.String(8192))
 
 
 class News(db.Model):

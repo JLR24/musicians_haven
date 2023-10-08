@@ -23,6 +23,8 @@
 
     <link rel="stylesheet" href="{{url_for('auth.static', filename='base.css')}}">
     <link rel="stylesheet" href="{{url_for('mh.static', filename='home.css')}}">
+    <link rel="stylesheet" href="{{url_for('help.static', filename='help.css')}}">
+    <link rel="stylesheet" href="{{url_for('admin.static', filename='admin.css')}}">
     
 
     <title>{% block title %} {% endblock %}</title>
@@ -39,7 +41,7 @@
                 <li><a href="/">Social</a></li>
                 <li><a href="/">Profile</a></li>
             {% endif %}
-            <li><a href="/">Help</a></li>
+            <li><a href="/help/">Help</a></li>
             {% if user.status == "Admin" %}
                 <li><a href="/admin/">Admin</a></li>
             {% endif %}

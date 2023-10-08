@@ -10,7 +10,7 @@
         {% if user.FollowsThreads() %}
             {% for tLink in user.GetFollowedThreadLinks() %}
                 {% if tLink.UserLastSeen() %}
-                    <a class="threadItem" style="color: #3363ff;;" href="/mh/social/thread/{{tLink.id}}">{{tLink.name}}</a>
+                    <a class="threadItem" style="color: #3363ff;" href="/mh/social/thread/{{tLink.id}}">{{tLink.name}}</a>
                 {% else %}
                     <a class="threadItem" style="color: #fd004c;" href="/mh/social/thread/{{thread.id}}">{{tLink.name}} *</a>
                 {% endif %}
