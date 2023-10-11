@@ -23,11 +23,13 @@ def CreateApp():
     from .admin.admin import admin
     from .help.help import help
     from .mh.mh import mh
+    from .mh.profile.profile import profile
 
     app.register_blueprint(auth, url_prefix="/auth")
     app.register_blueprint(admin, url_prefix="/admin")
     app.register_blueprint(help, url_prefix="/help")
     app.register_blueprint(mh, url_prefix="/mh")
+    app.register_blueprint(profile, url_prefix="/mh/profile")
 
     from .models import User
     login_manager = LoginManager()

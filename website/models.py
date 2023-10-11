@@ -59,6 +59,22 @@ class User(db.Model, UserMixin):
     def GetBanReason(self):
         '''Returns a string containing the reason for the user's ban'''
         return self.status[8:]
+    
+    def GetInstruments(self):
+        '''Returns a list of UserInstrument objects'''
+        return UserInstrument.query.filter_by(user=self.id).all()
+    
+    def GetGenres(self, sort=False):
+        '''Returns a list of UserGenre objects, optionally sorted by ranking'''
+        if sort:
+            return sorted(UserGenre.query.filter_by(user=self.id).all(), key=lambda i: i.ranking)
+        return UserGenre.query.filter_by(user=self.id).all()
+    
+    def GetFavourites(self, sort=False):
+        '''Returns a list of UserFavourite objects, optionally sorted by ranking'''
+        if sort:
+            return sorted(UserFavourite.query.filter_by(user=self.id).all(), key=lambda i: i.ranking)
+        return UserFavourite.query.filter_by(user=self.id).all()
 
 
 class UserSetting(db.Model):
@@ -78,6 +94,14 @@ class UserSetting(db.Model):
      - [6]: New message
      - [7]: New chat started
      [ - [8]: Rank change - always on]
+    '''
+    account_settings = db.Column(db.String(64)) # 1 for yes, 0 for no:
+    '''
+    Account Settings:
+     - [0]: Show name
+     - [1]: Show location
+     - [2]: Show place of work
+     - [3]: Show age (for bands)
     '''
 
 
@@ -111,6 +135,10 @@ class UserFavourite(db.Model):
     user = db.Column(db.Integer, db.ForeignKey("user.id"))
     band = db.Column(db.Integer, db.ForeignKey("band.id"))
     ranking = db.Column(db.Integer) # 0 by default, 1-x for top x bands.
+
+    def GetBand(self):
+        '''Returns the corresponding Band object'''
+        return Band.query.filter_by(id=self.band).first()
 
 
 class UserIdea(db.Model):
@@ -201,11 +229,16 @@ class Band(db.Model):
     def GetListeners(self):
         '''Returns a list of all users that have favourited this band'''
 
+    def GetGenreString(self):
+        '''Returns a string of the band's genres in order of ranking'''
+        return sorted(BandGenre.query.filter_by(band=self.id).all(), key=lambda i: i.ranking)
 
-class BandGenres(db.Model):
+
+class BandGenre(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     band = db.Column(db.Integer, db.ForeignKey("band.id"))
     genre = db.Column(db.String(256))
+    ranking = db.Column(db.Integer)
     state = db.Column(db.String(16))
 
 
