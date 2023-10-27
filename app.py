@@ -5,7 +5,6 @@ app = CreateApp()
 
 @app.route("/")
 def Home():
-    print("Running")
     return redirect(url_for("mh.Home"))
 
 @app.errorhandler(404)

@@ -54,3 +54,21 @@ def EmailHelpResponse(help, response):
         # If the process fails (most likely an account login failure)...
         flash(f'Mail send failure - - "{str(e)}" - - Please try again...', category="error")
         return False
+    
+
+def EmailMissingResponse(missing, response):
+    '''This function emails the missing report response to the user'''
+    try:
+        # Define email details
+        msg = Message("Musician's Haven Missing Report - Response",
+            sender = ("Musician's Haven", "musicians.haven.app@gmail.com"),
+            recipients = [(missing.email)]
+        )
+        msg.body = f"Response: {response}"
+        msg.html = render_template("email_missing.html", response=response, missing=missing, current_date=datetime.datetime.today().strftime('%d/%m/%Y'), user=current_user)
+        mail.send(msg)
+        return True
+    except Exception as e:
+        # If the process fails (most likely an account login failure)...
+        flash(f'Mail send failure - - "{str(e)}" - - Please try again...', category="error")
+        return False

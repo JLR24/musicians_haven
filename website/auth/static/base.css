@@ -74,3 +74,14 @@
 .activeNav {
     background-color: red;
 }
+
+
+.input-group * {
+    margin-left: 5px;
+}
+
+.required:after {
+    content: " *";
+    color: red;
+    /* Source: https://stackoverflow.com/questions/11197671/use-css-to-automatically-add-required-field-asterisk-to-form-inputs */
+}

@@ -1,0 +1,27 @@
+{% extends "help_base.html" %}
+
+{% block title %} Missing Instrument {% endblock %}
+
+{% block content %}
+
+    <h1>Are we missing content from out site?</h1><br>
+
+    <form method="POST" action="{{url_for('help.HandleMissingInstrument')}}" id="instrument" class="formList">
+        <h3>Missing Instruments:</h3><br>
+        <div class="form-group">
+            <label for="instrument">What instrument is missing from our selection?</label>
+            <input type="text" class="form-control" name="instrument" placeholder="Enter the instrument name" required autofocus class="required">
+            <small class="form-text text-muted">Search our full list <a href="/mh/profile/about#instrument_add">here</a>.</small>
+        </div>
+        <div class="form-group">
+            <label for="info">Enter any relevant supporting information if you choose</label>
+            <textarea name="info" placeholder="Enter information" class="form-control" rows="2"></textarea>
+        </div>
+        <div class="form-group">
+            <label for="email">Enter your email if you are happy for us to contact you regarding this submission</label>
+            <input type="email" class="form-control" name="email" placeholder="Enter your email">
+        </div>
+        <input type="submit" class="btn btn-outline-success" value="Submit">
+    </form>
+
+{% endblock %}

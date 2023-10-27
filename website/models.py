@@ -122,6 +122,18 @@ class UserInstrument(db.Model):
     year = db.Column(db.Integer)
     level = db.Column(db.String(256))
 
+    @property
+    def serialise(self):
+        # Source: https://stackoverflow.com/questions/7102754/jsonify-a-sqlalchemy-result-set-in-flask
+        return {
+            "id": self.id,
+            "user": self.user,
+            "instrument": self.instrument,
+            "details": self.details,
+            "year": self.year,
+            "level": self.level
+        }
+
 
 class UserGenre(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -388,6 +400,14 @@ class Help(db.Model):
     email = db.Column(db.String(320))
     date = db.Column(db.DateTime(timezone=True), default=func.now())
     question = db.Column(db.String(8192))
+
+
+class Missing(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    email = db.Column(db.String(320))
+    type = db.Column(db.String(128))
+    value = db.Column(db.String(256))
+    info = db.Column(db.String(2048))
 
 
 class News(db.Model):

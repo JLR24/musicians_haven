@@ -1,7 +1,7 @@
 from flask import Blueprint, render_template, url_for, redirect, flash, request
 from flask_login import current_user, login_required
-from ..models import db, User, Help
-from .static.admin_utilities import IsAdmin, GetAdmins, GetEditors, GetMax, GetBanned, EmailHelpResponse
+from ..models import db, User, Help, Missing
+from .static.admin_utilities import IsAdmin, GetAdmins, GetEditors, GetMax, GetBanned, EmailHelpResponse, EmailMissingResponse
 
 admin = Blueprint("admin", __name__, template_folder="templates", static_folder="static")
 
@@ -34,6 +34,16 @@ def HelpResponse():
         return redirect(url_for("home.Home"))
     response = request.args.get("r")
     return render_template("admin_help.html", user=current_user, active="Help", queries=Help.query.all(), response=response)
+
+
+@admin.route("/missing")
+@login_required
+def MissingReports():
+    '''This page displays the admin missing reports response page'''
+    if not IsAdmin():
+        return redirect(url_for("home.Home"))
+    response = request.args.get("r")
+    return render_template("admin_missing.html", user=current_user, active="Missing", missing=Missing.query.all(), response=response)
 
 
 # @admin.route("/logs")
@@ -169,3 +179,24 @@ def HandleHelpResponse():
     db.session.delete(help)
     db.session.commit()
     return redirect(url_for("admin.HelpResponse"))
+
+
+@admin.route("/HandleMissing", methods=["POST"])
+@login_required
+def HandleMissing():
+    '''This page handles the response to missing report'''
+    if not IsAdmin():
+        return redirect(url_for("home.Home"))
+    missing = Missing.query.filter_by(id=request.form.get("id")).first()
+    if not missing:
+        flash("Invalid details!", category="error")
+        return redirect(url_for("admin.Home"))
+    response = request.form.get("response")
+    if response and len(response) > 0:
+        if not EmailMissingResponse(missing, response):
+            flash("Error sending email, please try again")
+            return redirect(url_for("admin.MissingReports", r=response))
+    # Delete Help object from db
+    db.session.delete(missing)
+    db.session.commit()
+    return redirect(url_for("admin.MissingReports"))

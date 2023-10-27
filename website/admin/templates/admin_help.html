@@ -13,8 +13,8 @@
                     <p><span style="font-weight: bold;">Query: </span>{{query.question}}</p>
                     <input type="hidden" name="id" value="{{query.id}}">
                     <div class="form-group">
-                        <label for="response">Enter Response</label>
-                        <textarea name="response" placeholder="Enter your response..." class="form-control" rows="3" required>{% if response %}{{response}}{% endif %}</textarea>
+                        <label for="response" class="required">Enter Response</label>
+                        <textarea name="response" placeholder="Enter your response..." class="form-control" rows="3" required class="required">{% if response %}{{response}}{% endif %}</textarea>
                     </div>
                     <input type="submit" value="Submit Response" class="btn btn-outline-success">
                 </form>
