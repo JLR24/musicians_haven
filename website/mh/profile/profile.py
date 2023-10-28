@@ -1,6 +1,6 @@
 from flask import Blueprint, render_template, url_for, redirect, flash, request, jsonify
 from flask_login import current_user, login_required
-from ...models import db, UserInstrument
+from ...models import db, UserInstrument, UserGenre
 from .static.file_reader import GetInstruments, GetCities, GetCountries
 import datetime
 
@@ -18,14 +18,29 @@ def Current():
 def About():
     '''Displays the possible profile settings to the user'''
     user_instruments = [i.serialise for i in current_user.GetInstruments()]
+    user_genres = [i.serialise for i in current_user.GetGenres()]
     return render_template("profile_settings.html", 
         user=current_user, active="Profile", 
         year=datetime.datetime.now().year, 
         instruments=GetInstruments(), 
         user_instruments=user_instruments,
         cities=GetCities(), 
-        countries=GetCountries()
+        countries=GetCountries(),
+        user_genres=user_genres
     )
+
+
+@profile.route("/HandleBio", methods=["POST"])
+@login_required
+def HandleBio():
+    '''Handles the form submission when the user sets their bio'''
+    bio = request.form.get("bio")
+    if len(bio) > 0:
+        current_user.bio = bio
+    else:
+        current_user.bio = None
+    db.session.commit()
+    return redirect(url_for("profile.About"))
 
 
 @profile.route("/HandleNewInstrument", methods=["POST"])
@@ -68,7 +83,11 @@ def HandleUpdateInstrument():
 @login_required
 def HandleSetCountry():
     '''Handles the form submission when the user sets their country'''
-    current_user.country = request.form.get("countries")
+    country = request.form.get("countries")
+    if len(country) > 0:
+        current_user.country = country
+    else:
+        current_user.country = None
     db.session.commit()
     return redirect(url_for("profile.About"))
 
@@ -77,7 +96,11 @@ def HandleSetCountry():
 @login_required
 def HandleSetCity():
     '''Handles the form submission when the user sets their city'''
-    current_user.city = request.form.get("cities")
+    city = request.form.get("cities")
+    if len(city) > 0:
+        current_user.city = city
+    else:
+        current_user.city = None
     db.session.commit()
     return redirect(url_for("profile.About"))
 
@@ -86,3 +109,9 @@ def HandleSetCity():
 @login_required
 def HandleSetWork():
     '''Handles the form submission when the user sets their place of work'''
+
+
+@profile.route("/HandleGenres", methods=["POST"])
+@login_required
+def HandleGenres():
+    '''Handles the form submission when the user enters their preferred genres'''

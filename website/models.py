@@ -141,6 +141,16 @@ class UserGenre(db.Model):
     genre = db.Column(db.String(256))
     ranking = db.Column(db.Integer) # 0 by default, 1... for ranked.
 
+    @property
+    def serialise(self):
+        # Source: https://stackoverflow.com/questions/7102754/jsonify-a-sqlalchemy-result-set-in-flask
+        return {
+            "id": self.id,
+            "user": self.user,
+            "genre": self.genre,
+            "ranking": self.ranking
+        }
+
 
 class UserFavourite(db.Model):
     id = db.Column(db.Integer, primary_key=True)

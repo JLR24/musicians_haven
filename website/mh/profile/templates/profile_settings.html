@@ -7,6 +7,19 @@
     <h1>Profile Settings</h1><br>
 
     <div class="formList">
+        <h3>Profile Details:</h3><br>
+        <form method="POST" action="{{url_for('profile.HandleBio')}}">
+            <div class="form-group">
+                <label for="bio">Enter your bio:</label>
+                <div class="input-group">
+                    <input type="text" class="form-control" name="bio" placeholder="Enter your bio" {% if user.bio %}value="{{user.bio}}"{% endif %}>
+                    <input type="submit" class="btn btn-outline-success" value="Enter">
+                </div>
+            </div>
+        </form>
+    </div>
+    <hr>
+    <div class="formList">
         <h3>Manage Instruments:</h3><br>
         <select id="instrument_select" class="form-control" onchange="GetSelectedObject('instrument');">
             <option value="Add New" selected> + Add New</option>
@@ -34,6 +47,7 @@
                 <div class="form-group">
                     <label for="level">Enter your grading/level, if applicable:</label>
                     <input type="text" class="form-control" name="level" placeholder="Enter your grade/level...">
+                    <small class="form-text text-muted">Type "Ungraded." if you aren't doing grades.</small>
                 </div>
                 <div class="form-group">
                     <label for="details">Enter any additional details:</label>
@@ -58,6 +72,7 @@
                     <div class="form-group">
                         <label for="level">Enter your grading/level, if applicable:</label>
                         <input type="text" class="form-control" name="level" placeholder="Enter your grade/level..." {% if inst.level %}value="{{inst.level}}"{% endif %}>
+                        <small class="form-text text-muted">Type "Ungraded." if you aren't doing grades.</small>
                     </div>
                     <div class="form-group">
                         <label for="details">Enter any additional details:</label>
@@ -69,7 +84,7 @@
             </form>
         {% endfor %}
     </div>
-    <br>
+    <hr>
     <div class="formList">
         <h3>Your Location:</h3><br>
         <form method="POST" action="{{url_for('profile.HandleSetCountry')}}" id="country_add">
@@ -108,17 +123,31 @@
             <input type="submit" class="btn btn-outline-success" value="Set Work"> 
         </form>
     </div>
+    <hr>
+    <div class="formList">
+        <h3>Preferred Genres:</h3><br>
+        <form method="POST" action="{{url_for('profile.HandleGenres')}}" id="genre_add">
+            <input type="hidden" value="{{user.GetGenres() | length}}" name="genre_count" id="genre_count" class="btn btn-outline-success">
+            <!-- NOTE: WE ARE STARTING FROM ** 1 **. -->
+            <!-- Redo this entire thing w/ JS only? (No point having 2 languages do the same thing, but need JS for resetting.) -->
+            <div id="genreBox">
+            </div>
+        </form>
+        <button onclick="console.log(isRankingFree(3));">Click</button>
+    </div>
     
+
     <script>
         window.onload = function() {
             window["dict"] = ReloadDict();
             window["user_"] = {
                 "instrument": JSON.parse('{{user_instruments | tojson | safe}}'),
             };
+            window["genres"] = JSON.parse('{{user_genres | tojson | safe}}');
+            setUpForm();
         }
 
         function ReloadDict() {
-            console.log("Reloaded.");
             return {
                 "instrument": Filter("{{instruments}}"),
                 "country": Filter("{{countries}}"),
@@ -128,4 +157,5 @@
     </script>
     <script src="{{url_for('profile.static', filename='autofiller.js')}}"></script>
     <script src="{{url_for('profile.static', filename='selection.js')}}"></script>
+    <script src="{{url_for('profile.static', filename='genres.js')}}"></script>
 {% endblock %}

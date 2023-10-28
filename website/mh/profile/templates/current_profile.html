@@ -11,18 +11,27 @@
     </div>
     <br><br><br><br>
 
-    <p>To display: Posts, Bands</p>
-    <table style="width: 100%">
-        {% if bio %}
-            <td>Bio: {{user.bio}}</td>
-        {% endif %}
-        <td>Editor Score: {{user.editor_score}}</td>
-        <td>Friends: {{user.GetFriendLinks() | length}}</td>
-        {% if user.band_status %}
-            <td>Band Status: {{user.band_status}}</td>
-        {% endif %}
+    <table style="width: 100%; text-align: center;">
+        <tr>
+            <td>Editor Score: {{user.editor_score}}</td>
+            <td>Friends: {{user.GetFriendLinks() | length}}</td>
+            {% if user.band_status %}
+                <td>Band Status: {{user.band_status}}</td>
+            {% endif %}
+        </tr>
+        <tr>
+            {% if user.country %}
+                <td>Country: {{user.country}}</td>
+            {% endif %}
+            {% if user.city %}
+                <td>City: {{user.city}}</td>
+            {% endif %}
+        </tr>
     </table>
     <br>
+    {% if user.bio %}
+        <p style="font-style: italic; padding-left: 20px;">Bio: {{user.bio}}</p>
+    {% endif %}
     {% if user.GetInstruments() | length > 0 %}
     <table style="width: 100%; border: 1px solid black; text-align: center;" class="table table-bordered">
         <thead class="table table-dark">
