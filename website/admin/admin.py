@@ -192,7 +192,7 @@ def HandleMissing():
         flash("Invalid details!", category="error")
         return redirect(url_for("admin.Home"))
     response = request.form.get("response")
-    if response and len(response) > 0:
+    if missing.email and response and len(response) > 0:
         if not EmailMissingResponse(missing, response):
             flash("Error sending email, please try again")
             return redirect(url_for("admin.MissingReports", r=response))

@@ -11,12 +11,15 @@
             <div class="formList">
                 <form method="POST" action="{{url_for('admin.HandleMissing')}}">
                     <h3>Type: {{m.type}}, value: {{m.value}}</h3>
+                    <p>Details: {{m.info}}</p>
                     <input type="hidden" name="id" value="{{m.id}}">
-                    <div class="form-group">
-                        <label for="response">Enter Response (leave blank for no response)</label>
-                        <textarea name="response" placeholder="Enter your response..." class="form-control" rows="3">{% if response %}{{response}}{% endif %}</textarea>
-                    </div>
-                    <input type="submit" value="Submit" class="btn btn-outline-success">
+                    {% if m.email %}
+                        <div class="form-group">
+                            <label for="response">Enter Response (leave blank for no response)</label>
+                            <textarea name="response" placeholder="Enter your response..." class="form-control" rows="3">{% if response %}{{response}}{% endif %}</textarea>
+                        </div>
+                    {% endif %}
+                    <input type="submit" value="Complete" class="btn btn-outline-success">
                 </form>
             </div>
             <br>

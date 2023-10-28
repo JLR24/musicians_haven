@@ -1,7 +1,7 @@
 from flask import Blueprint, render_template, url_for, redirect, flash, request, jsonify
 from flask_login import current_user, login_required
 from ...models import db, UserInstrument
-from .static.file_reader import GetInstruments
+from .static.file_reader import GetInstruments, GetCities, GetCountries
 import datetime
 
 profile = Blueprint("profile", __name__, template_folder="templates", static_folder="static")
@@ -18,7 +18,14 @@ def Current():
 def About():
     '''Displays the possible profile settings to the user'''
     user_instruments = [i.serialise for i in current_user.GetInstruments()]
-    return render_template("profile_settings.html", user=current_user, active="Profile", year=datetime.datetime.now().year, instruments=GetInstruments(), user_instruments=user_instruments)
+    return render_template("profile_settings.html", 
+        user=current_user, active="Profile", 
+        year=datetime.datetime.now().year, 
+        instruments=GetInstruments(), 
+        user_instruments=user_instruments,
+        cities=GetCities(), 
+        countries=GetCountries()
+    )
 
 
 @profile.route("/HandleNewInstrument", methods=["POST"])
@@ -55,3 +62,27 @@ def HandleUpdateInstrument():
         inst.level = request.form.get("level")
     db.session.commit()
     return redirect(url_for("profile.About"))
+
+
+@profile.route("/HandleSetCountry", methods=["POST"])
+@login_required
+def HandleSetCountry():
+    '''Handles the form submission when the user sets their country'''
+    current_user.country = request.form.get("countries")
+    db.session.commit()
+    return redirect(url_for("profile.About"))
+
+
+@profile.route("/HandleSetCity", methods=["POST"])
+@login_required
+def HandleSetCity():
+    '''Handles the form submission when the user sets their city'''
+    current_user.city = request.form.get("cities")
+    db.session.commit()
+    return redirect(url_for("profile.About"))
+
+
+@profile.route("/HandleSetWork", methods=["POST"])
+@login_required
+def HandleSetWork():
+    '''Handles the form submission when the user sets their place of work'''

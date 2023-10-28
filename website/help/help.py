@@ -41,14 +41,14 @@ def HandleContact():
     return redirect(url_for("help.Home"))
 
 
-@help.route("/HandleMissingInstrument", methods=["POST"])
-def HandleMissingInstrument():
-    '''This page handles the missing instrument form'''
+@help.route("/HandleMissing", methods=["POST"])
+def HandleMissing():
+    '''This page handles the missing form'''
     db.session.add(Missing(
         email = request.form.get("email"),
         info = request.form.get("info"),
-        value = request.form.get("instrument"),
-        type = "instrument"
+        value = request.form.get("value"),
+        type = request.form.get("type")
     ))
     db.session.commit()
     flash("Your response has been sent to the admins!", category="success")

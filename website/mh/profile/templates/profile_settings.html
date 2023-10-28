@@ -22,10 +22,10 @@
                     <input type="text" class="form-control" name="instrument_search" placeholder="Instrument name..." id="instrument_search"  onkeyup="Get('instrument')">
                     <button class="btn btn-outline-danger" type="button" onclick="Clear('instrument')">Clear Instrument</button>
                 </div>
-                <p class="AddedInstruments" id="added_instrument">Added instrument: {% if user.instruments %}{{user.instruments}}{% endif %}</p>
+                <p class="AddedInstruments" id="added_instrument">Added instrument: </p>
                 <div id="searchResults_instrument"></div>
                 <a href="/help/missing#instrument" id="instrument_missing" style="display: none;">Missing instruments? Let us know!</a><br>
-                <input type="hidden" id="instruments" name="instruments" class="false">
+                <input type="hidden" id="instruments" name="instruments">
                 
                 <div class="form-group">
                     <label for="year">Enter the year you started playing:</label>
@@ -39,7 +39,7 @@
                     <label for="details">Enter any additional details:</label>
                     <textarea name="details" placeholder="Enter any additional details..." class="form-control" rows="2"></textarea>
                 </div>
-                <input type="submit" class="btn btn-outline-success" value="Add" onclick="return checkEntered('instrument')"> 
+                <input type="submit" class="btn btn-outline-success" value="Add" onclick="return checkEntered('instrument', true)"> 
             </div>
         </form>
         {% for inst in user.GetInstruments() %}
@@ -69,6 +69,45 @@
             </form>
         {% endfor %}
     </div>
+    <br>
+    <div class="formList">
+        <h3>Your Location:</h3><br>
+        <form method="POST" action="{{url_for('profile.HandleSetCountry')}}" id="country_add">
+            <div class="form-group">
+                <label for="country">Begin typing your country and then select from the options below</label>
+                <div class="input-group">
+                    <input type="text" class="form-control" name="country_search" placeholder="Enter the name of your country..." id="country_search"  onkeyup="Get('country')">
+                    <button class="btn btn-outline-danger" type="button" onclick="Clear('country')">Clear Country</button>
+                </div>
+                <p class="AddedCountry" id="added_country">Added country: {% if user.country %}{{user.country}}{% endif %}</p>
+                <div id="searchResults_country"></div>
+                <a href="/help/missing#country" id="country_missing" style="display: none;">Missing countries? Let us know!</a><br>
+                <input type="hidden" id="countrys" name="countries" {% if user.country %}value="{{user.country}}"{% endif %}>
+            </div>
+            <input type="submit" class="btn btn-outline-success" value="Set Country"> 
+        </form><hr>
+        <form method="POST" action="{{url_for('profile.HandleSetCity')}}" id="city_add">
+            <div class="form-group">
+                <label for="city">Begin typing your city and then select from the options below</label>
+                <div class="input-group">
+                    <input type="text" class="form-control" name="city_search" placeholder="Enter the name of your city..." id="city_search"  onkeyup="Get('city')">
+                    <button class="btn btn-outline-danger" type="button" onclick="Clear('city')">Clear City</button>
+                </div>
+                <p class="AddedCity" id="added_city">Added city: {% if user.city %}{{user.city}}{% endif %}</p>
+                <div id="searchResults_city"></div>
+                <a href="/help/missing#city" id="city_missing" style="display: none;">Missing cities? Let us know!</a><br>
+                <input type="hidden" id="citys" name="cities" {% if user.city %}value="{{user.city}}"{% endif %}>
+            </div>
+            <input type="submit" class="btn btn-outline-success" value="Set City"> 
+        </form><hr>
+        <form method="POST" action="{{url_for('profile.HandleSetWork')}}">
+            <div class="form-group">
+                <label for="work">Begin typing your place of work/education and then select from the options below, or click add new</label>
+                <input type="text" class="form-control" name="work" placeholder="Enter your place of work...">
+            </div>
+            <input type="submit" class="btn btn-outline-success" value="Set Work"> 
+        </form>
+    </div>
     
     <script>
         window.onload = function() {
@@ -82,6 +121,8 @@
             console.log("Reloaded.");
             return {
                 "instrument": Filter("{{instruments}}"),
+                "country": Filter("{{countries}}"),
+                "city": Filter("{{cities}}")
             };
         }
     </script>

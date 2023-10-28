@@ -6,11 +6,11 @@
 
     <h1>Are we missing content from out site?</h1><br>
 
-    <form method="POST" action="{{url_for('help.HandleMissingInstrument')}}" id="instrument" class="formList">
+    <form method="POST" action="{{url_for('help.HandleMissing')}}" id="instrument" class="formList">
         <h3>Missing Instruments:</h3><br>
         <div class="form-group">
-            <label for="instrument">What instrument is missing from our selection?</label>
-            <input type="text" class="form-control" name="instrument" placeholder="Enter the instrument name" required autofocus class="required">
+            <label for="value">What instrument is missing from our selection?</label>
+            <input type="text" class="form-control" name="value" placeholder="Enter the instrument name" required autofocus class="required">
             <small class="form-text text-muted">Search our full list <a href="/mh/profile/about#instrument_add">here</a>.</small>
         </div>
         <div class="form-group">
@@ -21,6 +21,49 @@
             <label for="email">Enter your email if you are happy for us to contact you regarding this submission</label>
             <input type="email" class="form-control" name="email" placeholder="Enter your email">
         </div>
+        <input type="hidden" name="type" value="Instrument">
+        <input type="submit" class="btn btn-outline-success" value="Submit">
+    </form>
+
+    <br><hr><br>
+
+    <form method="POST" action="{{url_for('help.HandleMissing')}}" id="country" class="formList">
+        <h3>Missing Coutries:</h3><br>
+        <div class="form-group">
+            <label for="value">Which country is missing from our selection?</label>
+            <input type="text" class="form-control" name="value" placeholder="Enter the country name" required autofocus class="required">
+            <small class="form-text text-muted">Search our full list <a href="/mh/profile/about#country_add">here</a>.</small>
+        </div>
+        <div class="form-group">
+            <label for="info">Enter any relevant supporting information if you choose</label>
+            <textarea name="info" placeholder="Enter information" class="form-control" rows="2"></textarea>
+        </div>
+        <div class="form-group">
+            <label for="email">Enter your email if you are happy for us to contact you regarding this submission</label>
+            <input type="email" class="form-control" name="email" placeholder="Enter your email">
+        </div>
+        <input type="hidden" name="type" value="Country">
+        <input type="submit" class="btn btn-outline-success" value="Submit">
+    </form>
+
+    <br><hr><br>
+
+    <form method="POST" action="{{url_for('help.HandleMissing')}}" id="city" class="formList">
+        <h3>Missing Cities:</h3><br>
+        <div class="form-group">
+            <label for="value">Which city is missing from our selection?</label>
+            <input type="text" class="form-control" name="value" placeholder="Enter the city name" required autofocus class="required">
+            <small class="form-text text-muted">Search our full list <a href="/mh/profile/about#city_add">here</a>.</small>
+        </div>
+        <div class="form-group">
+            <label for="info">Enter any relevant supporting information if you choose</label>
+            <textarea name="info" placeholder="Enter information" class="form-control" rows="2"></textarea>
+        </div>
+        <div class="form-group">
+            <label for="email">Enter your email if you are happy for us to contact you regarding this submission</label>
+            <input type="email" class="form-control" name="email" placeholder="Enter your email">
+        </div>
+        <input type="hidden" name="type" value="City">
         <input type="submit" class="btn btn-outline-success" value="Submit">
     </form>
 

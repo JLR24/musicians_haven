@@ -3,7 +3,7 @@
 function Clear(type) {
     if (confirm("Are you sure you want to clear your selection?")) {
         document.getElementById(type + "_search").value = "";
-        document.getElementById("added_" + type).innerHTML = "Added instrument:";
+        document.getElementById("added_" + type).innerHTML = "Added "+ type + ": ";
         Get(type);
         document.getElementById(type + "_missing").setAttribute("style", "display: none");
         document.getElementById(type + "_search").focus();
@@ -38,6 +38,13 @@ function CheckMatch(value, target) { // -> bool
     return false;
 }
 
+function CheckOrderedMatch(value, target) {
+    if (target.toLowerCase() === value.slice(0, target.length).toLowerCase() && target.trim() != "") {
+        return true;
+    }
+    return false;
+}
+
 
 function AddResult(result, resultDiv, type) {
     let button = document.createElement("button");
@@ -64,11 +71,23 @@ function Get(type) {
     // });
     document.getElementById(type + "_missing").setAttribute("style", "display: none");
     if (search.length != 0) {
+        let count = 0;
         document.getElementById(type + "_missing").setAttribute("style", "display: block");
         for (let i of values) {
-            if (CheckMatch(i, search)) {
-                AddResult(i, resultDiv, type);
+            if (type == "city") {
+                if (CheckOrderedMatch(i, search)) {
+                    AddResult(i, resultDiv, type);
+                    count += 1;
+                }
+            } else {
+                if (CheckMatch(i, search)) {
+                    AddResult(i, resultDiv, type);
+                    count += 1;
+                }
             }
+        }
+        if (count > 50) {
+            resultDiv.innerHTML = "Too many values to display, please type more of the word...";
         }
     }
 }
@@ -90,11 +109,13 @@ function Add(value, type) {
 }
 
 
-function checkEntered(type, alert=false) {
+function checkEntered(type, a=false) {
     let values = window.dict[type];
     let input = document.getElementById(type + "s").value;
     if (!values.includes(input)) {
-        alert("Please enter a valid " + type + " first!");
+        if (a) {
+            alert("Please enter a valid " + type + " first!");
+        }
         return false;
     }
     return true;

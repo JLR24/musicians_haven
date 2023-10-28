@@ -17,3 +17,23 @@ def GetInstruments():
                 break
     instruments = [i for i in instruments if i not in to_remove] # Source: https://www.geeksforgeeks.org/python-remove-all-values-from-a-list-present-in-other-list/
     return instruments
+
+
+def GetCountries():
+    '''Returns a list of countries strings from the .csv file'''
+    file = open("static/countries.csv", "r")
+    countries = file.read()
+    countries = countries.split(",")
+    countries = [i[4:-1] for i in countries] # Remove the area codes and additional quote marks
+    file.close()
+    return countries
+
+
+def GetCities():
+    '''Returns a list of cities strings from the .csv file'''
+    file = open("static/cities.csv", "r")
+    cities = []
+    for row in csv.reader(file):
+        cities.append(f"{row[1]} - {row[4]} ({row[7]})")
+    file.close()
+    return cities
