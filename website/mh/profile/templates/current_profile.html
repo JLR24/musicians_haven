@@ -4,116 +4,133 @@
 
 {% block content %}
 
-    <h1 style="float: left">Your Profile ({{user.username}})</h1>
-    <div style="float: right; text-align: center;">
-        <img src="{{url_for('profile.static', filename='user.png')}}" width="72px" height="72px"><br>
-        <small class="text-muted" style="font-size: xx-small;"><a href="https://www.flaticon.com/free-icons/user" title="user icons" style="color: black" target="_blank">source</a></small>
+    <div>
+        <div class="profileIcon" style="display: inline-block; vertical-align: middle;">
+            {% if user.icon %}
+                <p>NEED TO DISPLAY THE USER'S ICON</p>
+            {% else %}
+                <img src="{{url_for('profile.static', filename='user.png')}}" width="100px" height="100px">
+                <!-- Source: https://www.flaticon.com/free-icons/user -->
+            {% endif %}
+        </div>
+        <div style="display: inline-block; vertical-align: middle; padding-left: 20px;">
+            <h1>Your Profile ({{user.username}})</h1>
+            <small class="text-muted" style="padding-left: 15px;">Bio: <i>{{user.bio}}</i></small>
+        </div>
     </div>
-    <br><br><br><br>
 
-    <table style="width: 100%; text-align: center;">
-        <tr>
-            <td>Editor Score: {{user.editor_score}}</td>
-            <td>Friends: {{user.GetFriendLinks() | length}}</td>
-            {% if user.band_status %}
-                <td>Band Status: {{user.band_status}}</td>
-            {% endif %}
-        </tr>
-        <tr>
-            {% if user.country %}
-                <td>Country: {{user.country}}</td>
-            {% endif %}
-            {% if user.city %}
-                <td>City: {{user.city}}</td>
-            {% endif %}
-        </tr>
-    </table>
-    <br>
-    {% if user.bio %}
-        <p style="font-style: italic; padding-left: 20px;">Bio: {{user.bio}}</p>
-    {% endif %}
-    {% if user.GetInstruments() | length > 0 %}
-    <table style="width: 100%; border: 1px solid black; text-align: center;" class="table table-bordered">
-        <thead class="table table-dark">
-            <th>Instrument</th>
-            <th>Details</th>
-            <th>Level</th>
-            <th>Year Started</th>
-        </thead>
-        <tbody>
-            {% for inst in user.GetInstruments() %}
-                <tr>
-                    <td>{{inst.instrument}}</td>
-                    <td>{% if inst.details %}{{inst.details}}{% else %}N/A{% endif %}</td>
-                    <td>{% if inst.level %}{{inst.level}}{% else %}N/A{% endif %}</td>
-                    <td>{% if inst.year %}{{inst.year}}{% else %}N/A{% endif %}</td>
-                </tr>
-            {% endfor %}
-        </tbody>
-    </table>
-    <br>
-    {% else %}
-    <p>This user has not selected any instruments that they can play yet.</p>
-    {% endif %}
 
-    {% if user.GetGenres() | length > 0 %}
-    <table style="width: 100%; border: 1px solid black; text-align: center;" class="table table-bordered">
-        <thead class="table table-dark">
-            <th>Genre</th>
-            <th>Ranking</th>
-        </thead>
-        <tbody>
-            {% for genre in user.GetGenres(sort=True) %}
-                <tr>
-                    <td>{{genre.genre}}</td>
-                    <td>{% if genre.ranking > 0 %}{{genre.ranking}}{% else %}Not Ranked{% endif %}</td>
-                </tr>
-            {% endfor %}
-        </tbody>
-    </table>
-    <br>
-    {% else %}
-    <p>This user has not favourited any genres yet.</p>
-    {% endif %}
-
-    {% if user.GetFavourites() | length > 0 %}
-    <table style="width: 100%; border: 1px solid black; text-align: center;" class="table table-bordered">
-        <thead class="table table-dark">
-            <th>Band</th>
-            <th>Ranking</th>
-            <th>Band Genres</th>
-        </thead>
-        <tbody>
-            {% for fav in user.GetFavourites(sort=True) %}
-                <tr>
-                    <td>{{fav.GetBand().name}}</td>
-                    <td>{% if fav.ranking > 0 %}{{fav.ranking}}{% else %}Not Ranked{% endif %}</td>
-                    <td>{{fav.GetBand().GetGenreString()}}</td>
-                </tr>
-            {% endfor %}
-        </tbody>
-    </table>
-    <br>
-    {% else %}
-    <p>This user has not favourited any bands yet.</p>
-    {% endif %}
 
     <hr style="border-top: 1px solid black;"><br>
-    <div style="text-align: center;">
-        {% if user.GetPosts() %}
-            {% for post in user.GetPosts() %}
-                <div class="outer0">
-                    <div class="inner">
-                        <div class="image"><img class="p-img" src=""></div>
-                        <p data-toggle="tooltip" data-placement="top" title="Date posted: {{post.date.strftime('%d/%m/%Y, %H:%M')}}" style="font-size: 15px; letter-spacing: 2px; text-overflow: ellipsis;">
-                            <a href="/mh/profile/{{post.user}}#{{post.id}}">{{user.username}}:</a> {{post.caption}}
-                        </p>
-                    </div>
-                </div>
-            {% endfor %}
-        {% else %}
-            <p>This user has not made any posts yet.</p>
-        {% endif %}
+
+    <div class="profileContent">
+        <div class="profileTabs">
+            <div class="profileTab" id="details_tab" onclick="tabClick('details')" name="tab_button" style="border-right: 1px solid black;">Details</div>
+            <div class="profileTab" id="music_tab" onclick="tabClick('music')" name="tab_button">Music</div>
+            <div class="profileTab" id="posts_tab" onclick="tabClick('posts')" name="tab_button" style="border-left: 1px solid black;">Posts</div>
+        </div>
+        <div id="details_content" name="tab_content" style="display: none;" class="tabContent">
+            <div style="text-align: left;">
+                <p>
+                {% if user.country %} Country: {{user.country}} {% endif %}<br>
+                {% if user.city %} City: {{user.city}} {% endif %}
+                <p>
+                    Editor Score: {{user.editor_score}}<br>
+                    Friends: {{user.GetFriendLinks() | length}}
+                </p>
+            </div>
+        </div>
+
+        <div id="music_content" name="tab_content" style="display: none;" class="tabContent">
+            <div style="text-align: left;">
+                <h3>Favourite Genres:</h3>
+                {% if user.GetGenres() | length > 0 %}
+                    <ol>
+                    {% for genre in user.GetGenres(True) %}
+                        <li>{{genre.genre}}</li>
+                    {% endfor %}
+                    </ol>
+                {% else %}
+                    <p>This user has not favourited any genres yet.</p>
+                {% endif %}
+                <br>
+                <h3>Favourite Bands:</h3>
+                {% if user.GetFavourites() %}
+                    <ul style="list-style: none;">
+                        {% for band in user.GetFavourites(sort=True) %}
+                            <li>{% if band.ranking > 0 %}{{band.ranking}}){% endif %} {{band.GetBand().name}}</li>
+                        {% endfor %}
+                    </ul>
+                {% else %}
+                    <p>This user has not favourited any bands yet.</p>
+                {% endif %}
+                <br>
+                <h3>Instruments:</h3>
+            </div>
+            {% if user.GetInstruments() | length > 0 %}
+            <table style="width: 100%; border: 1px solid black; text-align: center;" class="table table-bordered">
+                <thead class="table table-dark">
+                    <th>Instrument</th>
+                    <th>Details</th>
+                    <th>Level</th>
+                    <th>Year Started</th>
+                </thead>
+                <tbody>
+                    {% for inst in user.GetInstruments() %}
+                        <tr>
+                            <td>{{inst.instrument}}</td>
+                            <td>{% if inst.details %}{{inst.details}}{% else %}N/A{% endif %}</td>
+                            <td>{% if inst.level %}{{inst.level}}{% else %}N/A{% endif %}</td>
+                            <td>{% if inst.year %}{{inst.year}}{% else %}N/A{% endif %}</td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+            <br>
+            {% else %}
+            <p>This user has not selected any instruments that they can play yet.</p>
+            {% endif %}
+        </div>
+
+        <div id="posts_content" name="tab_content" style="display: none;" class="tabContent">
+            <div style="text-align: center;">
+                {% if user.GetPosts() %}
+                    {% for post in user.GetPosts() %}
+                        <div class="outer0">
+                            <div class="inner">
+                                <div class="image"><img class="p-img" src=""></div>
+                                <p data-toggle="tooltip" data-placement="top" title="Date posted: {{post.date.strftime('%d/%m/%Y, %H:%M')}}" style="font-size: 15px; letter-spacing: 2px; text-overflow: ellipsis;">
+                                    <a href="/mh/profile/{{post.user}}#{{post.id}}">{{user.username}}:</a> {{post.caption}}
+                                </p>
+                            </div>
+                        </div>
+                    {% endfor %}
+                {% else %}
+                    <p>This user has not made any posts yet.</p>
+                {% endif %}
+            </div>
+        </div>
     </div>
 
+
+    <script>
+        window.onload = function() {
+            tabClick("details");
+        }
+
+        function tabClick(value) {
+            // Highlights the tab that is currently selected and displays the necessary content.
+            // Unselect all tabs/content
+            for (let b of document.getElementsByName("tab_button")) {
+                b.setAttribute("class", "profileTab");
+            }
+            for (let b of document.getElementsByName("tab_content")) {
+                b.setAttribute("style", "display: none;");
+            }
+
+            // Select necessary tab/content
+            document.getElementById(value + "_tab").setAttribute("class", "profileTab activeTab");
+            document.getElementById(value + "_content").setAttribute("style", "color: display: block;");
+        }  
+    </script>
 {% endblock %}

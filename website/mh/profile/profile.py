@@ -121,18 +121,32 @@ def HandleGenres():
     except:
         flash("Encountered an unknown error, please try again.", category="error")
         return redirect(url_for("profile.About"))
+    
+    encounteredGenreIDs = []
     for i in range(length):
         # No way of matching new elements to an ID?
         index = i + 1
         id = request.form.get(f"id:{index}")
         userGenre = UserGenre.query.filter_by(id=id).first()
         if userGenre:
+            encounteredGenreIDs.append(userGenre.id)
             userGenre.ranking = request.form.get(f"ranking:{id}")
+            db.session.commit()
         else:
-            db.session.add(UserGenre(
+            ug = UserGenre(
                 user = current_user.id,
                 genre = request.form.get(f"genre:{index}"),
                 ranking = request.form.get(f"ranking:{index}")
-            ))
+            )
+            db.session.add(ug)
+            db.session.commit()
+            encounteredGenreIDs.append(ug.id)
+
+    ugs = UserGenre.query.filter_by(user=current_user.id).all()
+    if len(encounteredGenreIDs) != len(ugs):
+        # Some genres have been deleted
+        for ug in ugs:
+            if ug.id not in encounteredGenreIDs:
+                db.session.delete(ug)
     db.session.commit()
     return redirect(url_for("profile.About") + "#genres")
