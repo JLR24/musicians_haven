@@ -428,3 +428,30 @@ class News(db.Model):
     tags = db.Column(db.String(1024))
     content = db.Column(db.String(262144))
     views = db.Column(db.Integer)
+
+
+# class Playlist(db.Model):
+#     id = db.Column(db.Integer, primary_key=True)
+#     user = db.Column(db.Integer, db.ForeignKey("user.id"))
+#     name = db.Column(db.String(256))
+#     date_created = db.Column(db.DateTime(timezone=True), default=func.now())
+#     description = db.Column(db.String(2048))
+#     public = db.Column(db.Boolean)
+
+
+# class PlayistCommit(db.Model):
+#     id = db.Column(db.Integer, primary_key=True)
+#     playlist = db.Column(db.Integer, db.ForeignKey("playlist.id"))
+#     message = db.Column(db.String(256))
+#     date = db.Column(db.DateTime(timezone=True), default=func.now())
+
+
+# class PlaylistChange(db.Model):
+#     id = db.Column(db.Integer, primary_key=True)
+#     commit = db.Column(db.Integer, db.ForeignKey("commit.id"))
+#     song = db.Column(db.Integer, db.ForeignKey("song.id"))
+#     action = db.Column(db.String(64))
+
+# class PlaylistSong(db.Model):
+#     pass
+#     # is this necessary?

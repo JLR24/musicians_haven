@@ -124,16 +124,23 @@
         </form>
     </div>
     <hr>
-    <div class="formList">
+    <div class="formList" id="genres">
         <h3>Preferred Genres:</h3><br>
         <form method="POST" action="{{url_for('profile.HandleGenres')}}" id="genre_add">
             <input type="hidden" value="{{user.GetGenres() | length}}" name="genre_count" id="genre_count" class="btn btn-outline-success">
             <!-- NOTE: WE ARE STARTING FROM ** 1 **. -->
-            <!-- Redo this entire thing w/ JS only? (No point having 2 languages do the same thing, but need JS for resetting.) -->
             <div id="genreBox">
             </div>
-        </form>
-        <button onclick="console.log(isRankingFree(3));">Click</button>
+            <input type="submit" class="btn btn-outline-success" value="Update">
+        </form><br><hr>
+        <label for="genre">Begin typing the genre and then select from the options below</label>
+        <div class="input-group">
+            <input type="text" class="form-control" name="genre_search" placeholder="Enter the new genre..." id="genre_search"  onkeyup="GetGenre('genre')">
+            <button class="btn btn-outline-danger" type="button" onclick="ClearGenre('genre')">Clear Genre</button>
+        </div>
+        <div id="searchResults_genre"></div>
+        <a href="/help/missing#genre" id="genre_missing" style="display: none;">Missing genres? Let us know!</a><br>
+        <p>To implement: Saving on the backend using a for loop with the genre_count form input.</p>
     </div>
     
 
@@ -151,7 +158,8 @@
             return {
                 "instrument": Filter("{{instruments}}"),
                 "country": Filter("{{countries}}"),
-                "city": Filter("{{cities}}")
+                "city": Filter("{{cities}}"),
+                "genre": Filter("{{genres}}")
             };
         }
     </script>

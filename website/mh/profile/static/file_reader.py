@@ -2,10 +2,9 @@ import csv
 from flask_login import current_user
 
 def GetInstruments():
-    '''Returns a list of instrument strings from the .txt file'''
+    '''Returns a list of instrument strings from the .txt file - REMOVES the instruments the user already plays'''
     file = open("static/instruments_reduced.txt", "r")
-    all = file.read()
-    instruments = all.split("\n")
+    instruments = file.read().split("\n")
     file.close()
 
     # Remove any instruments that have already been chosen
@@ -37,3 +36,17 @@ def GetCities():
         cities.append(f"{row[1]} - {row[4]} ({row[7]})")
     file.close()
     return cities
+
+def GetGenres():
+    '''Returns a list of genres from the .txt file - REMOVES the genres the user has already selected'''
+    file = open("static/genres.txt", "r")
+    genres = file.read().split("\n")
+    file.close()
+
+    to_remove = []
+    for g in genres:
+        for i in current_user.GetGenres():
+            if g == i.genre:
+                to_remove.append(g)
+                break
+    return [i for i in genres if i not in to_remove]

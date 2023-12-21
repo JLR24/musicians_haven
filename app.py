@@ -18,3 +18,14 @@ def InjectContent():
 
 if __name__ == "__main__":
     app.run(debug=True)
+
+# Playlist Tracker:
+# - Allows the user to store multiple playlists.
+# - Each playlist contains details (name, etc) and songs.
+# - Chnges to each playlist are tracked.
+# - This means that the user can return to a particular date to find:
+#   - Songs added around this time.
+#   - The current state of the playlist at this time.
+#   - (If there is a change on that day, different times can be viewed).
+#   - Research some way of linking this directly to Spotify/Apple?
+#   - Also allow for memories (one year ago today...)

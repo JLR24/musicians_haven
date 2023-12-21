@@ -1,7 +1,7 @@
 from flask import Blueprint, render_template, url_for, redirect, flash, request, jsonify
 from flask_login import current_user, login_required
 from ...models import db, UserInstrument, UserGenre
-from .static.file_reader import GetInstruments, GetCities, GetCountries
+from .static.file_reader import GetInstruments, GetCities, GetCountries, GetGenres
 import datetime
 
 profile = Blueprint("profile", __name__, template_folder="templates", static_folder="static")
@@ -26,7 +26,8 @@ def About():
         user_instruments=user_instruments,
         cities=GetCities(), 
         countries=GetCountries(),
-        user_genres=user_genres
+        user_genres=user_genres,
+        genres = GetGenres()
     )
 
 
@@ -115,3 +116,23 @@ def HandleSetWork():
 @login_required
 def HandleGenres():
     '''Handles the form submission when the user enters their preferred genres'''
+    try:
+        length = int(request.form.get("genre_count"))
+    except:
+        flash("Encountered an unknown error, please try again.", category="error")
+        return redirect(url_for("profile.About"))
+    for i in range(length):
+        # No way of matching new elements to an ID?
+        index = i + 1
+        id = request.form.get(f"id:{index}")
+        userGenre = UserGenre.query.filter_by(id=id).first()
+        if userGenre:
+            userGenre.ranking = request.form.get(f"ranking:{id}")
+        else:
+            db.session.add(UserGenre(
+                user = current_user.id,
+                genre = request.form.get(f"genre:{index}"),
+                ranking = request.form.get(f"ranking:{index}")
+            ))
+    db.session.commit()
+    return redirect(url_for("profile.About") + "#genres")
