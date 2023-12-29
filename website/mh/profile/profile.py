@@ -1,6 +1,6 @@
 from flask import Blueprint, render_template, url_for, redirect, flash, request, jsonify
 from flask_login import current_user, login_required
-from ...models import db, UserInstrument, UserGenre
+from ...models import db, UserInstrument, UserGenre, Notification
 from .static.file_reader import GetInstruments, GetCities, GetCountries, GetGenres
 import datetime
 
@@ -10,6 +10,19 @@ profile = Blueprint("profile", __name__, template_folder="templates", static_fol
 @login_required
 def Current():
     '''Displays the profile of the current user'''
+    # db.session.add(Notification(
+    #     user = 1,
+    #     type = "Announcement",
+    #     content = f"Hey, {current_user.username}! Welcome to Musician's Haven, if you need any help or support, please head over to our help pages!",
+    #     seen = False
+    # ))
+    # db.session.add(Notification(
+    #     user = 1,
+    #     type = "Testing",
+    #     content = "Test number 1",
+    #     seen = False
+    # ))
+    # db.session.commit()
     return render_template("current_profile.html", user=current_user, active="Home")
 
 
@@ -29,6 +42,13 @@ def About():
         user_genres=user_genres,
         genres = GetGenres()
     )
+
+
+@profile.route("/notifications")
+@login_required
+def Notifications():
+    '''Displays the user's notifications'''
+    return render_template("notifications.html", user=current_user)
 
 
 @profile.route("/HandleBio", methods=["POST"])
@@ -150,3 +170,19 @@ def HandleGenres():
                 db.session.delete(ug)
     db.session.commit()
     return redirect(url_for("profile.About") + "#genres")
+
+
+@profile.route("/HandleNotification", methods=["POST"])
+@login_required
+def HandleNotification():
+    '''Handles the form submission when the user reads or clears a notification'''
+    notif = Notification.query.filter_by(id=request.form.get("notification"), user=current_user.id).first()
+    if not notif:
+        flash("Invalid details!", category="error")
+        return redirect(url_for("profile.Notifications"))
+    if request.form.get("form") == "Unseen": # Mark as seen
+        notif.seen = True
+    else: # Delete from db
+        db.session.delete(notif)
+    db.session.commit()
+    return redirect(url_for("profile.Notifications"))

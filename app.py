@@ -29,3 +29,10 @@ if __name__ == "__main__":
 #   - (If there is a change on that day, different times can be viewed).
 #   - Research some way of linking this directly to Spotify/Apple?
 #   - Also allow for memories (one year ago today...)
+    
+
+# FEATURES TO ADD:
+# - Consider bandcamp/soundcloud features (owner notes on songs (such as inspiration), links to their other platforms, etc).
+# - Playlist tracker.
+# - Last Login.
+# - Metronome, tempo calculator, chord analyser.

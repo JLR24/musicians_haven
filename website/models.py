@@ -75,6 +75,12 @@ class User(db.Model, UserMixin):
         if sort:
             return sorted(UserFavourite.query.filter_by(user=self.id).all(), key=lambda i: i.ranking)
         return UserFavourite.query.filter_by(user=self.id).all()
+    
+    def GetNotifications(self, seen=False):
+        if seen:
+            return Notification.query.filter_by(user=self.id, seen=True).all()
+        else:
+            return Notification.query.filter_by(user=self.id, seen=False).all()
 
 
 class UserSetting(db.Model):
@@ -372,6 +378,7 @@ class ThreadPost(db.Model):
     content = db.Column(db.String(16384))
     number = db.Column(db.Integer)
     reply = db.Column(db.Integer, db.ForeignKey("thread_post.id")) # None for not a reply, postID for a reply to that post.
+    state = db.Column(db.String(16))
 
 
 class ThreadPostInteraction(db.Model):

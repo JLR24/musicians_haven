@@ -40,7 +40,7 @@
             <li><a href="/">Learn</a></li>
             {% if user.is_authenticated %}
                 <li><a href="/">Social</a></li>
-                <li><a href="/mh/profile/">Profile</a></li>
+                <li><a href="/mh/profile/" class="notification">Profile{% if n_notification > 9 %}<span class="NB-badge">+</span>{% elif n_notification > 0 %}<span class="NB-badge">{{n_notification}}</span>{% endif %}</a></li>
             {% endif %}
             <li><a href="/help/">Help</a></li>
             {% if user.status == "Admin" %}

@@ -1,7 +1,7 @@
 from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
 from os import path
-from flask_login import LoginManager
+from flask_login import LoginManager, current_user
 from flask_migrate import Migrate
 from flask_mail import Mail
 import os
@@ -63,5 +63,15 @@ def CreateDatabase(app):
 
 
 def GetNotifications():
-    # try:
-    return dict(n_help=0, n_edit=0, n_report=0, n_request=0, n_notifications=0)
+    try:
+        reports = 0
+        edits = 0
+        help = 0
+        if current_user.status == "Admin":
+            from .models import Help, Thread, ThreadPost, UserPost, Song, Album, SongContent
+            reports = len(Song.query.filter_by(state="r").all()) + len(Thread.query.filter_by(state="r").all()) + len(ThreadPost.query.filter_by(state="r").all()) + len(SongContent.query.filter_by(state="r").all()) + len(UserPost.query.filter_by(state="r").all())
+            edits = 0 # NOTE: PENDING
+            help = len(Help.query.all())
+        return dict(n_help = help, n_edit = edits, n_report = reports, n_notification = len(current_user.GetNotifications(seen=False)))
+    except:
+        return dict(n_help=0, n_edit=0, n_report=0, n_notification=0)

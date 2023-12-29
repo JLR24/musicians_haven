@@ -1,0 +1,54 @@
+{% extends "profile_base.html" %}
+
+{% block title %} {{user.username}} - Notifications {% endblock %}
+
+{% block content %}
+
+    <h1>Notifications:</h1><br>
+
+    <div style="padding-left: 10px;">
+        <!-- Type ending in d is for admin approved. -->
+        <h2>Unseen Notifications:</h2>
+        {% for n in user.GetNotifications(seen=False) %}
+            <form method="POST" action="{{url_for('profile.HandleNotification')}}">
+                <input type="hidden" name="notification" value="{{n.id}}">
+                <input type="hidden" name="form" value="Unseen">
+                <div 
+                    {% if n.type == "Message" %} class="alert alert-success alert-dismissible fade show" 
+                    {% elif n.type == "Announcement" %} class="alert alert-danger alert-dismissible fade show" 
+                    {% elif n.type[-1] == "d" %} class="alert alert-info alert-dismissible fade show" 
+                    {% else %} class="alert alert-primary alert-dismissible fade show" 
+                    {% endif %}
+                role="alert" style="border: 1px solid grey;">
+                    <h3>{{n.type}}</h3>
+                    <small class="text-muted">{{n.date.strftime("%d/%m/%Y at %H:%M")}}</small>
+                    <p>{{n.content}}</p>
+                    <input class="btn close" type="submit" value="&times;">
+                </div>
+            </form>
+        {% endfor %}
+    </div>
+    <br><hr><br>
+    <div style="padding-left: 10px;">
+        <h2>Seen Notifications:</h2>
+        {% for n in user.GetNotifications(seen=True) %}
+            <form method="POST" action="{{url_for('profile.HandleNotification')}}">
+                <input type="hidden" name="notification" value="{{n.id}}">
+                <input type="hidden" name="form" value="Seen">
+                <div 
+                    {% if n.type == "Message" %} class="alert alert-success alert-dismissible fade show" 
+                    {% elif n.type == "Announcement" %} class="alert alert-danger alert-dismissible fade show" 
+                    {% elif n.type[-1] == "d" %} class="alert alert-info alert-dismissible fade show" 
+                    {% else %} class="alert alert-primary alert-dismissible fade show" 
+                    {% endif %}
+                role="alert" style="border: 1px solid grey;">
+                    <h3>{{n.type}}</h3>
+                    <small class="text-muted">{{n.date.strftime("%d/%m/%Y at %H:%M")}}</small>
+                    <p>{{n.content}}</p>
+                    <input class="btn close" type="submit" value="&times;">
+                </div>
+            </form>
+        {% endfor %}
+    </div>
+
+{% endblock %}
