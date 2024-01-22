@@ -6,7 +6,8 @@
         <div class="menu">
             <ul class="nav-links second-nav-links">
                 <li><a href="/mh/profile/" {% if active == "Home" %} style="color: black;" {% endif %}>My Profile</a></li>
-                <li><a href="/mh/profile/ideas" {% if active == "Ideas" %} style="color: black;" {% endif %}>Ideas</a></li>
+                <!-- OR SHOULD IDEAS BE IT'S OWN SECTION, IT IS QUITE BIG? -->
+                <li><a href="/mh/profile/" {% if active == "Ideas" %} style="color: black;" {% endif %}>Ideas</a></li>
                 <li><a href="/mh/profile/notifications" {% if active == "Notifications" %} style="color: black;" {% endif %}>Notifications</a></li>
                 <li><a href="/mh/profile/about" {% if active == "Profile" %} style="color: black;" {% endif %}>Profile Settings</a></li>
                 <li><a href="/mh/profile/settings" {% if active == "Account" %} style="color: black;" {% endif %}>Account Settings</a></li>

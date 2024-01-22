@@ -46,24 +46,31 @@ def Forums():
 def search_for_users(search):
     '''Returns a list of user objects whose usernames and names match the given search string.'''
 
-    # To consider: splits (spaces/underscores/dots, etc) in both the search term and the user's username and name. Ratio should be very high (or require a perfect match up until the word length?)
     possible_results = User.query.filter(or_(User.name.like(f"%{search.lower()}%"), User.username.like(f"%{search.lower()}%"))).all() # Source: https://hackersandslackers.com/database-queries-sqlalchemy-orm/
     results = []
     for user in possible_results:
         ratios = []
+        
+        # Compare username
         username_ratio = fuzz.ratio(user.username.lower()[:len(search)], search.lower())
-        if username_ratio > 90:
+        if username_ratio >= 80:
             ratios.append(username_ratio)
+
+        # # Compare entire name
+        # name_ratio = fuzz.ratio(user.name.lower(), search.lower())
+        # if name_ratio >= 90:
+        #     ratios.append(name_ratio)
         
         if user.name:
-            # Now check against each word in their name.
+            # Now check against each word in their name (first and last name).
             for word in user.name.lower().split(" "):
                 ratio = fuzz.ratio(word, search.lower())
-                if ratio > 90:
+                if ratio >= 90:
                     ratios.append(ratio - 20) # -20 since lots of people will have the same first names
         
         # Now get the maximum ratio and add to the results list
         if len(ratios) > 0:
             results.append((user, max(ratios)))
 
+    # Return sorted list of the names only (without the ratios).
     return [i[0] for i in sorted(results, key=lambda x: x[1], reverse=True)]

@@ -17,6 +17,15 @@
                 </div>
             </div>
         </form>
+        <form method="POST" action="{{url_for('profile.HandleDob')}}">
+            <div class="form-group">
+                <label for="dob">Enter your date of birth:</label>
+                <div class="input-group">
+                    <input type="date" class="form-control" name="dob" placeholder="Enter your date of birth" {% if user.dob %}value="{{user.dob}}"{% endif %}>
+                    <input type="submit" class="btn btn-outline-success" value="Enter">
+                </div>
+            </div>
+        </form>
         <form method="POST" action="{{url_for('profile.HandleBio')}}">
             <div class="form-group">
                 <label for="bio">Enter your bio:</label>

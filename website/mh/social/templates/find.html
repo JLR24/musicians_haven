@@ -18,7 +18,7 @@
         <h2>Results:</h2>
         <ul>
         {% for result in results %}
-            <li><a href="/mh/social/profile/{{result.id}}">{{result.username}} {% if result.name %}({{result.name}}){% endif %}: [Display Icon: {{result.icon}}]</a></li>
+            <li><a href="/mh/social/profile/{{result.id}}">{{result.username}} {% if result.name %}({{result.name}}){% endif %}: [NEED TO DISPLAY ICON: {{result.icon}}]</a></li>
         {% endfor %}
         </ul>
     {% endif %}

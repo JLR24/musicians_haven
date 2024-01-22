@@ -20,7 +20,8 @@ def About():
     user_instruments = [i.serialise for i in current_user.getInstruments()]
     user_genres = [i.serialise for i in current_user.getGenres()]
     return render_template("profile_settings.html", 
-        user=current_user, active="Profile", 
+        user=current_user, 
+        active="Profile", 
         year=datetime.datetime.now().year, 
         instruments=get_instruments(), 
         user_instruments=user_instruments,
@@ -31,24 +32,18 @@ def About():
     )
 
 
+@profile.route("/settings")
+@login_required
+def Settings():
+    '''Displays the possible account settings to the user'''
+    return render_template("account_settings.html", user=current_user, active="Account")
+
+
 @profile.route("/notifications")
 @login_required
 def Notifications():
     '''Displays the user's notifications'''
     return render_template("notifications.html", user=current_user, active="Notifications")
-
-
-@profile.route("/HandleBio", methods=["POST"])
-@login_required
-def HandleBio():
-    '''Handles the form submission when the user sets their bio'''
-    bio = request.form.get("bio")
-    if len(bio) > 0:
-        current_user.bio = bio
-    else:
-        current_user.bio = None
-    db.session.commit()
-    return redirect(url_for("profile.About"))
 
 
 @profile.route("/HandleName", methods=["POST"])
@@ -60,6 +55,32 @@ def HandleName():
         current_user.name = name
     else:
         current_user.name = None
+    db.session.commit()
+    return redirect(url_for("profile.About"))
+
+
+@profile.route("/HandleDob", methods=["POST"])
+@login_required
+def HandleDob():
+    '''Handles the form submission when the user sets their date of birth'''
+    dob = request.form.get("dob")
+    if dob:
+        current_user.dob = datetime.datetime.strptime(dob, "%Y-%m-%d")
+    else:
+        current_user.dob = None
+    db.session.commit()
+    return redirect(url_for("profile.About"))
+
+
+@profile.route("/HandleBio", methods=["POST"])
+@login_required
+def HandleBio():
+    '''Handles the form submission when the user sets their bio'''
+    bio = request.form.get("bio")
+    if len(bio) > 0:
+        current_user.bio = bio
+    else:
+        current_user.bio = None
     db.session.commit()
     return redirect(url_for("profile.About"))
 
