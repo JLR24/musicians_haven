@@ -10,7 +10,8 @@ db = SQLAlchemy()
 DB_NAME = "database.db"
 mail = Mail()
 
-def CreateApp():
+def create_app():
+    # Initialise Flask app details
     app = Flask(__name__)
     app.config["SECRET_KEY"] = os.getenv("SECRET_KEY")
     app.config["SQLALCHEMY_DATABASE_URI"] = f"sqlite:///{DB_NAME}"
@@ -19,6 +20,7 @@ def CreateApp():
     db.init_app(app)
     migrate = Migrate(app, db)
 
+    # Import and register blueprints
     from .auth.auth import auth
     from .admin.admin import admin
     from .help.help import help
@@ -31,6 +33,7 @@ def CreateApp():
     app.register_blueprint(mh, url_prefix="/mh")
     app.register_blueprint(profile, url_prefix="/mh/profile")
 
+    # Setup login manager
     from .models import User
     login_manager = LoginManager()
     login_manager.login_view = "auth.Login"
@@ -40,7 +43,8 @@ def CreateApp():
     def load_user(id):
         return User.query.get(int(id))
     
-    CreateDatabase(app)
+
+    create_database(app)
     
     # Set up Flask Mail settings
     app.config.update(dict(
@@ -56,13 +60,14 @@ def CreateApp():
 
     return app
 
-def CreateDatabase(app):
+def create_database(app):
     if not path.exists('website/' + DB_NAME):
         db.create_all(app=app)
         print("Created database!")
 
 
-def GetNotifications():
+def get_notifications():
+    '''Return a dict containing the user's notifications to be displayed as badge notifications on the site's navbar'''
     try:
         reports = 0
         edits = 0
@@ -72,6 +77,6 @@ def GetNotifications():
             reports = len(Song.query.filter_by(state="r").all()) + len(Thread.query.filter_by(state="r").all()) + len(ThreadPost.query.filter_by(state="r").all()) + len(SongContent.query.filter_by(state="r").all()) + len(UserPost.query.filter_by(state="r").all())
             edits = 0 # NOTE: PENDING
             help = len(Help.query.all())
-        return dict(n_help = help, n_edit = edits, n_report = reports, n_notification = len(current_user.GetNotifications(seen=False)))
+        return dict(n_help = help, n_edit = edits, n_report = reports, n_notification = len(current_user.getNotifications(seen=False)))
     except:
         return dict(n_help=0, n_edit=0, n_report=0, n_notification=0)

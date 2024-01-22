@@ -1,7 +1,7 @@
 from flask import redirect, url_for, flash
-from website import CreateApp, GetNotifications
+from website import create_app, get_notifications
 
-app = CreateApp()
+app = create_app()
 
 @app.route("/")
 def Home():
@@ -14,25 +14,7 @@ def PageNotFound(error):
 
 @app.context_processor
 def InjectContent():
-    return GetNotifications()
+    return get_notifications()
 
 if __name__ == "__main__":
     app.run(debug=True)
-
-# Playlist Tracker:
-# - Allows the user to store multiple playlists.
-# - Each playlist contains details (name, etc) and songs.
-# - Chnges to each playlist are tracked.
-# - This means that the user can return to a particular date to find:
-#   - Songs added around this time.
-#   - The current state of the playlist at this time.
-#   - (If there is a change on that day, different times can be viewed).
-#   - Research some way of linking this directly to Spotify/Apple?
-#   - Also allow for memories (one year ago today...)
-    
-
-# FEATURES TO ADD:
-# - Consider bandcamp/soundcloud features (owner notes on songs (such as inspiration), links to their other platforms, etc).
-# - Playlist tracker.
-# - Last Login.
-# - Metronome, tempo calculator, chord analyser.

@@ -1,5 +1,5 @@
 from flask import Blueprint, render_template, url_for, redirect, flash, request
-from flask_login import current_user, login_required
+from flask_login import current_user
 from ..models import db, Help, Missing
 
 help = Blueprint("help", __name__, template_folder="templates", static_folder="static")

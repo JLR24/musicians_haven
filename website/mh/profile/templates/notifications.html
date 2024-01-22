@@ -9,7 +9,7 @@
     <div style="padding-left: 10px;">
         <!-- Type ending in d is for admin approved. -->
         <h2>Unseen Notifications:</h2>
-        {% for n in user.GetNotifications(seen=False) %}
+        {% for n in user.getNotifications(seen=False) %}
             <form method="POST" action="{{url_for('profile.HandleNotification')}}">
                 <input type="hidden" name="notification" value="{{n.id}}">
                 <input type="hidden" name="form" value="Unseen">
@@ -31,7 +31,7 @@
     <br><hr><br>
     <div style="padding-left: 10px;">
         <h2>Seen Notifications:</h2>
-        {% for n in user.GetNotifications(seen=True) %}
+        {% for n in user.getNotifications(seen=True) %}
             <form method="POST" action="{{url_for('profile.HandleNotification')}}">
                 <input type="hidden" name="notification" value="{{n.id}}">
                 <input type="hidden" name="form" value="Seen">

@@ -1,6 +1,6 @@
+// This function allows users to edit one selected object at a time (from a dropdown).
 
-
-function GetSelectedObject(type) {
+function getSelectedObject(type) {
     let currentSelection = document.getElementById(type + "_select").value;
 
     for (let x of window.user_[type]) {

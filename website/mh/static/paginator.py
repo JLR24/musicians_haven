@@ -1,7 +1,7 @@
 # # # # # # # # # # # # # # # # 
 # Jack Ricketts
 # 15/03/2023
-# Paginator code
+# Custom Paginator code
 # # # # # # # # # # # # # # # # 
 
 class Paginator():
@@ -12,7 +12,7 @@ class Paginator():
         self.current = start
 
 
-    def Get(self):
+    def get(self):
         last = self.current  * self.count - 1
         first = last - self.count + 1
         if self.current < 0:
@@ -30,7 +30,7 @@ class Paginator():
             return []
         
 
-    def GetPage(self, page):
+    def getPage(self, page):
         last = page  * self.count - 1
         first = last - self.count + 1
         if page <= 0:
@@ -49,26 +49,26 @@ class Paginator():
             return []
         
         
-    def HasNext(self, page):
+    def hasNext(self, page):
         try:
             x = self.list[page * self.count]
             return True
         except:
             return False
     
-    def HasPrev(self, page):
+    def hasPrev(self, page):
         if page < 2:
             return False
         return True
     
-    def GetNext(self):
+    def getNext(self):
         self.current += 1
         return self.Get()
     
-    def GetPrev(self):
+    def getPrev(self):
         self.current -= 1
         return self.Get()
     
-    def Jump(self, page):
+    def jump(self, page):
         self.current = page
         return self.Get()

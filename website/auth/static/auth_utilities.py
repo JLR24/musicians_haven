@@ -6,9 +6,10 @@ from flask import flash, current_app, session, render_template, redirect, url_fo
 from itsdangerous import URLSafeTimedSerializer
 from werkzeug.security import generate_password_hash
 from werkzeug.urls import url_parse
+from os import getenv
 
 
-def IsLoggedIn():
+def is_logged_in():
     '''Returns True if the user is logged in, False otherwise'''
     if current_user.is_authenticated:
         flash("You are already logged in!", category="error")
@@ -16,7 +17,7 @@ def IsLoggedIn():
     return False
 
 
-def GetUser(key):
+def get_user(key):
     '''Returns the user object from a key, either their username or email, None otherwise'''
     user = User.query.filter_by(username=key).first()
     if not user:
@@ -24,25 +25,25 @@ def GetUser(key):
     return user
 
 
-def CheckUser(username, email):
+def check_user(username, email):
     '''Returns True if the username and email are safe to use, False otherwise'''
-    if GetUser(username) or GetUser(email) or len(username) < 1:
+    if get_user(username) or get_user(email) or len(username) < 1:
         return False
     return True
 
 
-def GenerateToken():
+def generate_token():
     '''Generates and returns the validation token to be emailed'''
     s = URLSafeTimedSerializer(current_app.config["SECRET_KEY"])
     return s.dumps(session["email"], salt=current_app.config["SECURITY_PASSWORD_SALT"])
 
 
-def SendSignupToken(token):
+def send_signup_token(token):
     '''Sends the email with the signup token'''
     try:
         # Define email details
         msg = Message("Musician's Haven Signup Code",
-            sender = ("Musician's Haven", "musicians.haven.app@gmail.com"),
+            sender = ("Musician's Haven", getenv("EMAIL")),
             recipients = [(str(session["email"]))]
         )
         msg.body = f"Your email address was used to sign up to Musician's Haven, please use this link to activate your account: http://127.0.0.1:5000/auth/validate/{token}"
@@ -54,7 +55,7 @@ def SendSignupToken(token):
         return redirect(url_for("auth.Signup"))
     
 
-def CheckToken(token, expiration=600):
+def check_token(token, expiration=600):
     '''Checks that the token is valid'''
     # Source: https://realpython.com/handling-email-confirmation-in-flask/
     serialiser = URLSafeTimedSerializer(current_app.config["SECRET_KEY"])
@@ -64,7 +65,7 @@ def CheckToken(token, expiration=600):
         return False
     
 
-def AddUser():
+def add_user():
     '''Creates new User and UserSetting objects to be added to the database, returns the User object'''
     db.session.add(User(
         username = session["username"],
@@ -75,7 +76,7 @@ def AddUser():
     ))
     db.session.commit()
 
-    user = GetUser(session["username"])
+    user = get_user(session["username"])
     if not user:
         session.clear()
         flash("Encountered an unknown error, please try again.", category="error")
@@ -91,7 +92,7 @@ def AddUser():
     return user
     
 
-def GetRedirectAddress():
+def get_redirect_address():
     '''If the logged-out user is redirected to login, return to their previous page'''
     args = request.form.get("next")
     if not args or url_parse(args).netloc != "":

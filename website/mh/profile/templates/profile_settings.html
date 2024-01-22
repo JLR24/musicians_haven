@@ -30,9 +30,9 @@
     <hr>
     <div class="formList">
         <h3>Manage Instruments:</h3><br>
-        <select id="instrument_select" class="form-control" onchange="GetSelectedObject('instrument');">
+        <select id="instrument_select" class="form-control" onchange="getSelectedObject('instrument');">
             <option value="Add New" selected> + Add New</option>
-            {% for inst in user.GetInstruments() %}
+            {% for inst in user.getInstruments() %}
                 <option value="{{inst.id}}">{{inst.instrument}}</option>
             {% endfor %}
         </select>
@@ -41,8 +41,8 @@
             <div class="form-group">
                 <label for="instrument_search">Begin typing the instrument's name and then select from the options below</label>
                 <div class="input-group">
-                    <input type="text" class="form-control" name="instrument_search" placeholder="Instrument name..." id="instrument_search"  onkeyup="Get('instrument')">
-                    <button class="btn btn-outline-danger" type="button" onclick="Clear('instrument')">Clear Instrument</button>
+                    <input type="text" class="form-control" name="instrument_search" placeholder="Instrument name..." id="instrument_search"  onkeyup="get('instrument')">
+                    <button class="btn btn-outline-danger" type="button" onclick="clear('instrument')">Clear Instrument</button>
                 </div>
                 <p class="AddedInstruments" id="added_instrument">Added instrument: </p>
                 <div id="searchResults_instrument"></div>
@@ -65,7 +65,7 @@
                 <input type="submit" class="btn btn-outline-success" value="Add" onclick="return checkEntered('instrument', true)"> 
             </div>
         </form>
-        {% for inst in user.GetInstruments() %}
+        {% for inst in user.getInstruments() %}
             <form method="POST" action="{{url_for('profile.HandleUpdateInstrument')}}" style="display:none;" id="instrument_{{inst.id}}">
                 <div class="form-group">
                     <div class="form-group">
@@ -100,8 +100,8 @@
             <div class="form-group">
                 <label for="country">Begin typing your country and then select from the options below</label>
                 <div class="input-group">
-                    <input type="text" class="form-control" name="country_search" placeholder="Enter the name of your country..." id="country_search"  onkeyup="Get('country')">
-                    <button class="btn btn-outline-danger" type="button" onclick="Clear('country')">Clear Country</button>
+                    <input type="text" class="form-control" name="country_search" placeholder="Enter the name of your country..." id="country_search"  onkeyup="get('country')">
+                    <button class="btn btn-outline-danger" type="button" onclick="clear('country')">Clear Country</button>
                 </div>
                 <p class="AddedCountry" id="added_country">Added country: {% if user.country %}{{user.country}}{% endif %}</p>
                 <div id="searchResults_country"></div>
@@ -114,8 +114,8 @@
             <div class="form-group">
                 <label for="city">Begin typing your city and then select from the options below</label>
                 <div class="input-group">
-                    <input type="text" class="form-control" name="city_search" placeholder="Enter the name of your city..." id="city_search"  onkeyup="Get('city')">
-                    <button class="btn btn-outline-danger" type="button" onclick="Clear('city')">Clear City</button>
+                    <input type="text" class="form-control" name="city_search" placeholder="Enter the name of your city..." id="city_search"  onkeyup="get('city')">
+                    <button class="btn btn-outline-danger" type="button" onclick="clear('city')">Clear City</button>
                 </div>
                 <p class="AddedCity" id="added_city">Added city: {% if user.city %}{{user.city}}{% endif %}</p>
                 <div id="searchResults_city"></div>
@@ -137,15 +137,15 @@
         <h3>Preferred Genres:</h3><br>
         <form method="POST" action="{{url_for('profile.HandleGenres')}}" id="genre_add">
             <input type="hidden" value="{{user.GetGenres() | length}}" name="genre_count" id="genre_count" class="btn btn-outline-success">
-            <!-- NOTE: WE ARE STARTING FROM ** 1 **. -->
+            <!-- NOTE: THIS IS STARTING FROM ** 1 **. -->
             <div id="genreBox">
             </div>
             <input type="submit" class="btn btn-outline-success" value="Update">
         </form><br><hr>
         <label for="genre">Begin typing the genre and then select from the options below</label>
         <div class="input-group">
-            <input type="text" class="form-control" name="genre_search" placeholder="Enter the new genre..." id="genre_search"  onkeyup="GetGenre('genre')">
-            <button class="btn btn-outline-danger" type="button" onclick="ClearGenre('genre')">Clear Genre</button>
+            <input type="text" class="form-control" name="genre_search" placeholder="Enter the new genre..." id="genre_search"  onkeyup="getGenre('genre')">
+            <button class="btn btn-outline-danger" type="button" onclick="clearGenre('genre')">Clear Genre</button>
         </div>
         <div id="searchResults_genre"></div>
         <a href="/help/missing#genre" id="genre_missing" style="display: none;">Missing genres? Let us know!</a><br>
@@ -154,7 +154,7 @@
 
     <script>
         window.onload = function() {
-            window["dict"] = ReloadDict();
+            window["dict"] = reloadDict();
             window["user_"] = {
                 "instrument": JSON.parse('{{user_instruments | tojson | safe}}'),
             };
@@ -162,7 +162,7 @@
             setUpForm();
         }
 
-        function ReloadDict() {
+        function reloadDict() {
             return {
                 "instrument": Filter("{{instruments}}"),
                 "country": Filter("{{countries}}"),

@@ -1,5 +1,5 @@
-from flask import Blueprint, render_template, url_for, redirect, flash, request
-from flask_login import current_user, login_required
+from flask import Blueprint, render_template, flash, request
+from flask_login import current_user
 from .static.paginator import Paginator
 from ..models import db
 
@@ -8,11 +8,12 @@ mh = Blueprint("mh", __name__, template_folder="templates", static_folder="stati
 @mh.route("/")
 def Home():
     if current_user.is_authenticated:
+        # In case admin status is ever reset, set rank to admin.
         if current_user.username == "JLR24" and current_user.status != "Admin":
             current_user.status = "Admin"
             flash(" >> Promoted JLR24 to admin", category="info")
             db.session.commit()
-        feed = current_user.GetFeed()
+        feed = current_user.getFeed()
         if not feed:
             feed = []
             # feed.append(UserPost(caption="Testing Posts", user=1, date=datetime.datetime.now()))

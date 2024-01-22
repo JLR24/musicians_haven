@@ -1,30 +1,31 @@
 from flask import flash, render_template
 from flask_login import current_user
-from ...models import db, User
+from ...models import User
 from ... import mail
 from flask_mail import Message
 import datetime
+from os import getenv
 
 
-def IsAdmin():
-    '''Returns True if the user is an admin, False otherwise'''
+def is_admin():
+    '''Returns True if the user is an admin, False (and flashes error) otherwise'''
     if current_user.status != "Admin":
         flash("You don't have permission to view this page.", category="error")
         return False
     return True
 
 
-def GetEditors():
+def get_editors():
     '''Returns a list of all users with the rank "Editor"'''
     return User.query.filter_by(status="Editor").all()
 
 
-def GetAdmins():
+def get_admins():
     '''Returns a list of all users with the rank "Admin"'''
     return User.query.filter_by(status="Admin").all()
 
 
-def GetMax(input):
+def get_max(input):
     '''Returns the maximum length of lists in the inputted list -> Handles "None"s.'''
     m = 0
     for i in input:
@@ -33,17 +34,17 @@ def GetMax(input):
     return m
 
 
-def GetBanned():
+def get_banned():
     '''Returns a list of all banned users'''
     return User.query.filter(User.status.startswith("b")).all()
 
 
-def EmailHelpResponse(help, response):
+def email_help_response(help, response):
     '''This function emails the response to the user'''
     try:
         # Define email details
         msg = Message("Musician's Haven Query - Response",
-            sender = ("Musician's Haven", "musicians.haven.app@gmail.com"),
+            sender = ("Musician's Haven", getenv("EMAIL")),
             recipients = [(help.email)]
         )
         msg.body = f"Response: {response}"
@@ -56,12 +57,12 @@ def EmailHelpResponse(help, response):
         return False
     
 
-def EmailMissingResponse(missing, response):
+def email_missing_response(missing, response):
     '''This function emails the missing report response to the user'''
     try:
         # Define email details
         msg = Message("Musician's Haven Missing Report - Response",
-            sender = ("Musician's Haven", "musicians.haven.app@gmail.com"),
+            sender = ("Musician's Haven", getenv("EMAIL")),
             recipients = [(missing.email)]
         )
         msg.body = f"Response: {response}"

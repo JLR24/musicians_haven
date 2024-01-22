@@ -34,36 +34,27 @@ input.withoutArrows::-webkit-inner-spin-button {
 }
 
 .profileContent {
-    /* border: 1px solid black; */
     text-align: center;
-    /* padding: 10px 0px;    */
-
     border: 1px solid black;
     border-radius: 10px 10px 0px 0px;
 }
 
 .profileTabs {
-    /* padding-bottom: 5px; */
-    /* border-bottom: 1px solid black; */
     color: black;
     display: flex;
 }
 
 .profileTab {
     width: 33.333333%;
-    /* border: 1px solid black; */
-    /* border-bottom: none; */
     padding: 5px 0px;
     display: inline-block;
     margin: 0px;
     margin-bottom: 5px;
-    /* border-radius: 10px 10px 0px 0px; */
     border-bottom: 1px solid;
 }
 
 .activeTab {
     color: #fd004c;;
-    /* border: 1px solid black; */
     border-bottom: none;
     font-weight: bold;
 }

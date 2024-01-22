@@ -20,17 +20,17 @@ class User(db.Model, UserMixin):
     band_status = db.Column(db.String(128)) # Either "Looking", "In a band", "In a band, but may possibly join another", or "Not interested".
     status = db.Column(db.String(1024)) # Admin, User, Editor, Banned (+ reason), Suspended (+ reason)
 
-    def GetPosts(self):
+    def getPosts(self):
         '''Returns a list of the user's posts ordered by date.'''
         return (sorted(UserPost.query.filter_by(user=self.id).all(), key=lambda i: i.date)).reverse()
     
-    def GetFriendLinks(self):
+    def getFriendLinks(self):
         '''Returns a list of friend links.'''
         return UserLink.query.filter(UserLink.user1==self.id or UserLink.user2==self.id).all()
     
-    def GetFriends(self):
+    def getFriends(self):
         '''Returns a list of the user's friends.'''
-        links = sorted(self.GetFriendLinks(), key=lambda i: i.date)
+        links = sorted(self.getFriendLinks(), key=lambda i: i.date)
         results = []
         for link in links:
             if link.user1 != self.id:
@@ -39,44 +39,44 @@ class User(db.Model, UserMixin):
                 results.append(link.user2)
         return results
     
-    def GetFeed(self):
+    def getFeed(self):
         '''Returns the list of posts to appear in the user's feed.'''
         posts = []
-        for user in self.GetFriends():
-            posts.append(user.GetPosts())
+        for user in self.getFriends():
+            posts.append(user.getPosts())
         return sorted(posts, key=lambda i: i.date).reverse()
     
-    def FollowsThreads(self):
+    def followsThreads(self):
         '''Returns True if the user follows any threads, False otherwise'''
         if ThreadFollow.query.filter_by(user=self.id).first():
             return True
         return False
     
-    def GetFollowedThreadLinks(self):
+    def getFollowedThreadLinks(self):
         '''Returns a list of the user's followed threads'''
         return ThreadFollow.query.filter_by(user=self.id).all()
     
-    def GetBanReason(self):
+    def getBanReason(self):
         '''Returns a string containing the reason for the user's ban'''
         return self.status[8:]
     
-    def GetInstruments(self):
+    def getInstruments(self):
         '''Returns a list of UserInstrument objects'''
         return UserInstrument.query.filter_by(user=self.id).all()
     
-    def GetGenres(self, sort=False):
+    def getGenres(self, sort=False):
         '''Returns a list of UserGenre objects, optionally sorted by ranking'''
         if sort:
             return sorted(UserGenre.query.filter_by(user=self.id).all(), key=lambda i: i.ranking)
         return UserGenre.query.filter_by(user=self.id).all()
     
-    def GetFavourites(self, sort=False):
+    def getFavourites(self, sort=False):
         '''Returns a list of UserFavourite objects, optionally sorted by ranking'''
         if sort:
             return sorted(UserFavourite.query.filter_by(user=self.id).all(), key=lambda i: i.ranking)
         return UserFavourite.query.filter_by(user=self.id).all()
     
-    def GetNotifications(self, seen=False):
+    def getNotifications(self, seen=False):
         if seen:
             return Notification.query.filter_by(user=self.id, seen=True).all()
         else:
@@ -164,7 +164,7 @@ class UserFavourite(db.Model):
     band = db.Column(db.Integer, db.ForeignKey("band.id"))
     ranking = db.Column(db.Integer) # 0 by default, 1-x for top x bands.
 
-    def GetBand(self):
+    def getBand(self):
         '''Returns the corresponding Band object'''
         return Band.query.filter_by(id=self.band).first()
 
@@ -208,7 +208,7 @@ class Chat(db.Model):
     strict_join = db.Column(db.Boolean) # Only "admins" can add members, if all admins leave, the next "oldest" ChatUser is promoted.
     state = db.Column(db.String(16)) # Deleted, hidden (under review)
 
-    def GetRecent(self):
+    def getRecent(self):
         '''Returns the most recent message from the chat'''
         return "WIP"
     
@@ -220,7 +220,7 @@ class ChatUser(db.Model):
     date_joined = db.Column(db.DateTime(timezone=True), default=func.now())
     can_add = db.Column(db.Boolean)
 
-    def GetMessageColour(self):
+    def getMessageColour(self):
         '''Returns a (unique-ish) colour for each chat member.'''
         return "WIP"
     
@@ -254,10 +254,10 @@ class Band(db.Model):
     state = db.Column(db.String(16))
     owner = db.Column(db.Integer, db.ForeignKey("user.id"))
 
-    def GetListeners(self):
+    def getListeners(self):
         '''Returns a list of all users that have favourited this band'''
 
-    def GetGenreString(self):
+    def getGenreString(self):
         '''Returns a string of the band's genres in order of ranking'''
         return sorted(BandGenre.query.filter_by(band=self.id).all(), key=lambda i: i.ranking)
 
@@ -287,7 +287,7 @@ class BandMember(db.Model):
     date_left = db.Column(db.Date)
     state = db.Column(db.String(16))
 
-    def HasLeft(self):
+    def hasLeft(self):
         '''Returns true if this member has left the band'''
         return "WIP"
 
@@ -359,13 +359,13 @@ class ThreadFollow(db.Model):
     date = db.Column(db.DateTime(timezone=True), default=func.now())
     last_seen = db.Column(db.Integer)
 
-    def GetThread(self):
+    def getThread(self):
         '''Returns the associated thread'''
         return Thread.query.filter_by(id=self.thread).first()
     
-    def UserLastSeen(self):
+    def userLastSeen(self):
         '''Returns True if the user has seen the last post, False otherwise'''
-        if self.last_seen == self.GetThread().post_count:
+        if self.last_seen == self.getThread().post_count:
             return True
         return False
 
@@ -398,7 +398,7 @@ class Log(db.Model):
     content = db.Column(db.String(8192))
     state = db.Column(db.String(16)) # N/A, Hidden
 
-    def GetUser(self):
+    def getUser(self):
         '''Returns the User associated with the Log'''
         return User.query.filter_by(id=self.user).first()
 
@@ -435,30 +435,3 @@ class News(db.Model):
     tags = db.Column(db.String(1024))
     content = db.Column(db.String(262144))
     views = db.Column(db.Integer)
-
-
-# class Playlist(db.Model):
-#     id = db.Column(db.Integer, primary_key=True)
-#     user = db.Column(db.Integer, db.ForeignKey("user.id"))
-#     name = db.Column(db.String(256))
-#     date_created = db.Column(db.DateTime(timezone=True), default=func.now())
-#     description = db.Column(db.String(2048))
-#     public = db.Column(db.Boolean)
-
-
-# class PlayistCommit(db.Model):
-#     id = db.Column(db.Integer, primary_key=True)
-#     playlist = db.Column(db.Integer, db.ForeignKey("playlist.id"))
-#     message = db.Column(db.String(256))
-#     date = db.Column(db.DateTime(timezone=True), default=func.now())
-
-
-# class PlaylistChange(db.Model):
-#     id = db.Column(db.Integer, primary_key=True)
-#     commit = db.Column(db.Integer, db.ForeignKey("commit.id"))
-#     song = db.Column(db.Integer, db.ForeignKey("song.id"))
-#     action = db.Column(db.String(64))
-
-# class PlaylistSong(db.Model):
-#     pass
-#     # is this necessary?

@@ -168,3 +168,4 @@ script.py.mako
 .DS_Store
 
 user_static/
+features.txt

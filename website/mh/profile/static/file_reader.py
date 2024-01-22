@@ -1,7 +1,7 @@
 import csv
 from flask_login import current_user
 
-def GetInstruments():
+def get_instruments():
     '''Returns a list of instrument strings from the .txt file - REMOVES the instruments the user already plays'''
     file = open("static/instruments_reduced.txt", "r")
     instruments = file.read().split("\n")
@@ -10,7 +10,7 @@ def GetInstruments():
     # Remove any instruments that have already been chosen
     to_remove = []
     for inst in instruments:
-        for p in current_user.GetInstruments():
+        for p in current_user.getInstruments():
             if inst == p.instrument:
                 to_remove.append(inst)
                 break
@@ -18,7 +18,7 @@ def GetInstruments():
     return instruments
 
 
-def GetCountries():
+def get_countries():
     '''Returns a list of countries strings from the .csv file'''
     file = open("static/countries.csv", "r")
     countries = file.read()
@@ -28,7 +28,7 @@ def GetCountries():
     return countries
 
 
-def GetCities():
+def get_cities():
     '''Returns a list of cities strings from the .csv file'''
     file = open("static/cities.csv", "r")
     cities = []
@@ -37,7 +37,7 @@ def GetCities():
     file.close()
     return cities
 
-def GetGenres():
+def get_genres():
     '''Returns a list of genres from the .txt file - REMOVES the genres the user has already selected'''
     file = open("static/genres.txt", "r")
     genres = file.read().split("\n")
@@ -45,7 +45,7 @@ def GetGenres():
 
     to_remove = []
     for g in genres:
-        for i in current_user.GetGenres():
+        for i in current_user.getGenres():
             if g == i.genre:
                 to_remove.append(g)
                 break

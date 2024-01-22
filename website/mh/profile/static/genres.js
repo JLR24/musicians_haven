@@ -1,4 +1,4 @@
-
+// These functions allow users to select/order their genre preferences on the profile page.
 
 function isRankingFree(rank) {
     let count = parseInt(document.getElementById("genre_count").value);
@@ -42,8 +42,6 @@ function setUpForm() {
                 <button type="button" class="btn btn-outline-warning" onclick="removeGenre('${g.genre}')">Delete</button>
             </div>
         `
-        // <input type="submit" value="Update" name="update:${g.id}" class="btn btn-outline-success">
-        // <input type="submit" value="Delete" name="delete:${g.id}" class="btn btn-outline-warning" onclick="removeGenre(${g.genre})">
         genreBox.appendChild(genreDiv);
         count += 1;
     }
@@ -72,7 +70,7 @@ function decreaseRating(n) {
 }
 
 
-function GetGenre() {
+function getGenre() {
     values = window.dict["genre"];
     let search = document.getElementById("genre_search").value;
     let resultDiv = document.getElementById("searchResults_genre");
@@ -83,8 +81,8 @@ function GetGenre() {
         let count = 0;
         document.getElementById("genre_missing").setAttribute("style", "display: block");
         for (let i of values) {
-            if (CheckOrderedMatch(i, search)) {
-                AddGenreResult(i, resultDiv);
+            if (checkOrderedMatch(i, search)) {
+                addGenreResult(i, resultDiv);
                 count += 1;
             }
         }
@@ -95,7 +93,7 @@ function GetGenre() {
 }
 
 
-function AddGenreResult(result, resultDiv) {
+function addGenreResult(result, resultDiv) {
     let button = document.createElement("button");
     button.innerText = result;
     button.setAttribute("class", "btn btn-outline-secondary");
@@ -106,7 +104,7 @@ function AddGenreResult(result, resultDiv) {
 }
 
 
-function AddGenre(genre) {
+function addGenre(genre) {
     // Remove from list in window.dict;
     values = window.dict["genre"];
     for (i of values) {
@@ -128,13 +126,13 @@ function AddGenre(genre) {
 
     // Reload form and clear selection:
     setUpForm();
-    ClearGenre();
+    clearGenre();
 }
 
 
-function ClearGenre() {
+function clearGenre() {
     document.getElementById("genre_search").value = "";
-    GetGenre();
+    getGenre();
     document.getElementById("genre_missing").setAttribute("style", "display: none");
     document.getElementById("genre_search").focus();
 }
@@ -167,5 +165,5 @@ function removeGenre(genre) {
 
     // Reload form:
     setUpForm();
-    ClearGenre();
+    clearGenre();
 }

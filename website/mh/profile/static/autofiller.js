@@ -1,17 +1,18 @@
+// These functions allow the selections to work on the profile page (such as selecting instruments) -> allowing users to select options from a pre-determined list.
 
-
-function Clear(type) {
+function clear(type) {
+    // Clears the current input selection for the given type
     if (confirm("Are you sure you want to clear your selection?")) {
         document.getElementById(type + "_search").value = "";
         document.getElementById("added_" + type).innerHTML = "Added "+ type + ": ";
-        Get(type);
+        get(type);
         document.getElementById(type + "_missing").setAttribute("style", "display: none");
         document.getElementById(type + "_search").focus();
     }
 }
 
 
-function Filter(values) {
+function filter(values) {
     values = values.replaceAll("&#39;", "");
     values = values.replaceAll("&amp;", "&");
     values = values.replaceAll("&#34;", "");
@@ -23,7 +24,7 @@ function Filter(values) {
 }
 
 
-function CheckMatch(value, target) { // -> bool
+function checkMatch(value, target) { // -> bool
     var matches = 0;
     for (let val of value.split(" ")) {
         for (let tar of target.split(" ")) {
@@ -38,7 +39,7 @@ function CheckMatch(value, target) { // -> bool
     return false;
 }
 
-function CheckOrderedMatch(value, target) {
+function checkOrderedMatch(value, target) {
     if (target.toLowerCase() === value.slice(0, target.length).toLowerCase() && target.trim() != "") {
         return true;
     }
@@ -46,7 +47,7 @@ function CheckOrderedMatch(value, target) {
 }
 
 
-function AddResult(result, resultDiv, type) {
+function addResult(result, resultDiv, type) {
     let button = document.createElement("button");
     button.innerText = result;
     button.setAttribute("class", "btn btn-outline-secondary");
@@ -57,7 +58,7 @@ function AddResult(result, resultDiv, type) {
 }
 
 
-function Get(type) {
+function get(type) {
     values = window.dict[type];
     let search = document.getElementById(type + "_search").value;
     let resultDiv = document.getElementById("searchResults_" + type); 
@@ -75,13 +76,13 @@ function Get(type) {
         document.getElementById(type + "_missing").setAttribute("style", "display: block");
         for (let i of values) {
             if (type == "city") {
-                if (CheckOrderedMatch(i, search)) {
-                    AddResult(i, resultDiv, type);
+                if (checkOrderedMatch(i, search)) {
+                    addResult(i, resultDiv, type);
                     count += 1;
                 }
             } else {
-                if (CheckMatch(i, search)) {
-                    AddResult(i, resultDiv, type);
+                if (checkMatch(i, search)) {
+                    addResult(i, resultDiv, type);
                     count += 1;
                 }
             }
@@ -93,7 +94,7 @@ function Get(type) {
 }
 
 
-function Add(value, type) {
+function add(value, type) {
     let resultInput = document.getElementById(type + "s");
     let added = document.getElementById("added_" + type);
     let search = document.getElementById(type + "_search");

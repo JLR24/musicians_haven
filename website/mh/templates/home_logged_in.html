@@ -7,9 +7,9 @@
     <h1>Welcome to Musician's Haven!</h1><br>
 
     <div class="threadScrollBar">
-        {% if user.FollowsThreads() %}
-            {% for tLink in user.GetFollowedThreadLinks() %}
-                {% if tLink.UserLastSeen() %}
+        {% if user.followsThreads() %}
+            {% for tLink in user.getFollowedThreadLinks() %}
+                {% if tLink.userLastSeen() %}
                     <a class="threadItem" style="color: #3363ff;" href="/mh/social/thread/{{tLink.id}}">{{tLink.name}}</a>
                 {% else %}
                     <a class="threadItem" style="color: #fd004c;" href="/mh/social/thread/{{thread.id}}">{{tLink.name}} *</a>
@@ -39,7 +39,7 @@
 
     <div style="text-align: center;">
         {% if p.list | length > 0 %}
-            {% for post in p.GetPage(page | int) %}
+            {% for post in p.getPage(page | int) %}
             <div class="outer0">
                 <div class="inner">
                     <div class="image"><img class="p-img" src=""></div>
@@ -52,12 +52,12 @@
             {% endfor %}
             <br>
             <div style="text-align: center;">
-                {% if p.HasPrev(p.current) %}
+                {% if p.hasPrev(p.current) %}
                     <a class="btn btn-outline-info" href="/mh/?page={{p.current - 1}}" style="margin-right: 5px;">&lt;&lt;&lt; Back</a>
                 {% else %}
                     <a class="btn btn-outline-secondary disabled" href="/mh/?page={{p.current - 1}}" style="margin-right: 5px;">&lt;&lt;&lt; Back</a>
                 {% endif %}
-                {% if p.HasNext(p.current) %}
+                {% if p.hasNext(p.current) %}
                     <a class="btn btn-outline-info" href="/mh/?page={{p.current + 1}}" style="margin-left: 5px;">Next &gt;&gt;&gt;</a>
                 {% else %}
                     <a class="btn btn-outline-secondary disabled" href="/mh/?page={{p.current + 1}}" style="margin-left: 5px;">Next &gt;&gt;&gt;</a>

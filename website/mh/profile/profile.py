@@ -1,7 +1,7 @@
 from flask import Blueprint, render_template, url_for, redirect, flash, request, jsonify
 from flask_login import current_user, login_required
 from ...models import db, UserInstrument, UserGenre, Notification
-from .static.file_reader import GetInstruments, GetCities, GetCountries, GetGenres
+from .static.file_reader import get_instruments, get_cities, get_countries, get_genres
 import datetime
 
 profile = Blueprint("profile", __name__, template_folder="templates", static_folder="static")
@@ -10,19 +10,6 @@ profile = Blueprint("profile", __name__, template_folder="templates", static_fol
 @login_required
 def Current():
     '''Displays the profile of the current user'''
-    # db.session.add(Notification(
-    #     user = 1,
-    #     type = "Announcement",
-    #     content = f"Hey, {current_user.username}! Welcome to Musician's Haven, if you need any help or support, please head over to our help pages!",
-    #     seen = False
-    # ))
-    # db.session.add(Notification(
-    #     user = 1,
-    #     type = "Testing",
-    #     content = "Test number 1",
-    #     seen = False
-    # ))
-    # db.session.commit()
     return render_template("current_profile.html", user=current_user, active="Home")
 
 
@@ -30,17 +17,17 @@ def Current():
 @login_required
 def About():
     '''Displays the possible profile settings to the user'''
-    user_instruments = [i.serialise for i in current_user.GetInstruments()]
-    user_genres = [i.serialise for i in current_user.GetGenres()]
+    user_instruments = [i.serialise for i in current_user.getInstruments()]
+    user_genres = [i.serialise for i in current_user.getGenres()]
     return render_template("profile_settings.html", 
         user=current_user, active="Profile", 
         year=datetime.datetime.now().year, 
-        instruments=GetInstruments(), 
+        instruments=get_instruments(), 
         user_instruments=user_instruments,
-        cities=GetCities(), 
-        countries=GetCountries(),
+        cities=get_cities(), 
+        countries=get_countries(),
         user_genres=user_genres,
-        genres = GetGenres()
+        genres = get_genres()
     )
 
 
@@ -86,7 +73,6 @@ def HandleUpdateInstrument():
     '''Handles the form submission when the user updates an existing instrument'''
     inst = UserInstrument.query.filter_by(user=current_user.id, instrument=request.form.get("instruments")).first()
     if not inst:
-        print(request.form.get("instruments"))
         flash("Invalid details!", category="error")
         return redirect(url_for("profile.About"))
     
@@ -130,6 +116,7 @@ def HandleSetCity():
 @login_required
 def HandleSetWork():
     '''Handles the form submission when the user sets their place of work'''
+    return "WIP"
 
 
 @profile.route("/HandleGenres", methods=["POST"])

@@ -25,7 +25,7 @@
             {% for i in banned %}
                 <tr>
                     <td>{{i.username}}</td>
-                    <td>{{i.GetBanReason()}}</td>
+                    <td>{{i.getBanReason()}}</td>
                     <td>
                         <form method="POST" action="{{url_for('admin.HandlePardon')}}">
                             <input type="hidden" value="{{i.username}}" name="username">
