@@ -35,16 +35,16 @@
     <div class="navbar">
         <div class="menu">
         <ul class="nav-links">
-            <li><a href="/">Home</a></li>
-            <li><a href="/">Discover</a></li>
-            <li><a href="/">Learn</a></li>
+            <li><a href="/" {% if current_page == "home" %} style="text-decoration: underline; font-style: italic;" {% endif %}>Home</a></li>
+            <li><a href="/" {% if current_page == "discover" %} style="text-decoration: underline; font-style: italic;" {% endif %}>Discover</a></li>
+            <li><a href="/" {% if current_page == "learn" %} style="text-decoration: underline; font-style: italic;" {% endif %}>Learn</a></li>
             {% if user.is_authenticated %}
-                <li><a href="/">Social</a></li>
-                <li><a href="/mh/profile/" class="notification">Profile{% if n_notification > 9 %}<span class="NB-badge">+</span>{% elif n_notification > 0 %}<span class="NB-badge">{{n_notification}}</span>{% endif %}</a></li>
+                <li><a href="/mh/social" {% if current_page == "social" %} style="text-decoration: underline; font-style: italic;" {% endif %}>Social</a></li>
+                <li><a href="/mh/profile/" class="notification" {% if current_page == "profile" %} style="text-decoration: underline; font-style: italic;" {% endif %}>Profile{% if n_notification > 9 %}<span class="NB-badge">+</span>{% elif n_notification > 0 %}<span class="NB-badge">{{n_notification}}</span>{% endif %}</a></li>
             {% endif %}
-            <li><a href="/help/">Help</a></li>
+            <li><a href="/help/" {% if current_page == "help" %} style="text-decoration: underline; font-style: italic;" {% endif %}>Help</a></li>
             {% if user.status == "Admin" %}
-                <li><a href="/admin/">Admin</a></li>
+                <li><a href="/admin/" {% if current_page == "admin" %} style="text-decoration: underline; font-style: italic;" {% endif %}>Admin</a></li>
             {% endif %}
             {% if user.is_authenticated %}
                 <li><a href="/auth/logout">Logout</a></li>

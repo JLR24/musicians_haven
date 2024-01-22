@@ -1,4 +1,4 @@
-from flask import Blueprint, render_template, url_for, redirect, flash, request, jsonify
+from flask import Blueprint, render_template, url_for, redirect, flash, request
 from flask_login import current_user, login_required
 from ...models import db, UserInstrument, UserGenre, Notification
 from .static.file_reader import get_instruments, get_cities, get_countries, get_genres
@@ -35,7 +35,7 @@ def About():
 @login_required
 def Notifications():
     '''Displays the user's notifications'''
-    return render_template("notifications.html", user=current_user)
+    return render_template("notifications.html", user=current_user, active="Notifications")
 
 
 @profile.route("/HandleBio", methods=["POST"])
@@ -47,6 +47,19 @@ def HandleBio():
         current_user.bio = bio
     else:
         current_user.bio = None
+    db.session.commit()
+    return redirect(url_for("profile.About"))
+
+
+@profile.route("/HandleName", methods=["POST"])
+@login_required
+def HandleName():
+    '''Handles the form submission when the user sets their name'''
+    name = request.form.get("name")
+    if len(name) > 0:
+        current_user.name = name
+    else:
+        current_user.name = None
     db.session.commit()
     return redirect(url_for("profile.About"))
 

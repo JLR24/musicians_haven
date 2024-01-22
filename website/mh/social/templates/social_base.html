@@ -1,0 +1,15 @@
+{% extends "base.html" %}
+
+{% block second_nav %} 
+
+    <div class="navbar second_navbar" style="border-bottom: 2px solid black;">
+        <div class="menu">
+            <ul class="nav-links second-nav-links">
+                <li><a href="/mh/social/" {% if active == "Find" %} style="color: black;" {% endif %}>Find Users</a></li>
+                <li><a href="/mh/social/chats" {% if active == "Chats" %} style="color: black;" {% endif %}>Chats</a></li>
+                <li><a href="/mh/social/forums" {% if active == "Forums" %} style="color: black;" {% endif %}>Forums</a></li>
+            </ul>
+        </div>
+    </div>
+
+{% endblock %}

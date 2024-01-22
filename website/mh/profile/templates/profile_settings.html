@@ -8,6 +8,15 @@
 
     <div class="formList">
         <h3>Profile Details:</h3><br>
+        <form method="POST" action="{{url_for('profile.HandleName')}}">
+            <div class="form-group">
+                <label for="name">Enter your name:</label>
+                <div class="input-group">
+                    <input type="text" class="form-control" name="name" placeholder="Enter your name" {% if user.name %}value="{{user.name}}"{% endif %}>
+                    <input type="submit" class="btn btn-outline-success" value="Enter">
+                </div>
+            </div>
+        </form>
         <form method="POST" action="{{url_for('profile.HandleBio')}}">
             <div class="form-group">
                 <label for="bio">Enter your bio:</label>
@@ -136,7 +145,7 @@
     <div class="formList" id="genres">
         <h3>Preferred Genres:</h3><br>
         <form method="POST" action="{{url_for('profile.HandleGenres')}}" id="genre_add">
-            <input type="hidden" value="{{user.GetGenres() | length}}" name="genre_count" id="genre_count" class="btn btn-outline-success">
+            <input type="hidden" value="{{user.getGenres() | length}}" name="genre_count" id="genre_count" class="btn btn-outline-success">
             <!-- NOTE: THIS IS STARTING FROM ** 1 **. -->
             <div id="genreBox">
             </div>

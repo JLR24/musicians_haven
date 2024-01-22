@@ -1,4 +1,4 @@
-from flask import Flask
+from flask import Flask, request
 from flask_sqlalchemy import SQLAlchemy
 from os import path
 from flask_login import LoginManager, current_user
@@ -26,12 +26,14 @@ def create_app():
     from .help.help import help
     from .mh.mh import mh
     from .mh.profile.profile import profile
+    from .mh.social.social import social
 
     app.register_blueprint(auth, url_prefix="/auth")
     app.register_blueprint(admin, url_prefix="/admin")
     app.register_blueprint(help, url_prefix="/help")
     app.register_blueprint(mh, url_prefix="/mh")
     app.register_blueprint(profile, url_prefix="/mh/profile")
+    app.register_blueprint(social, url_prefix="/mh/social")
 
     # Setup login manager
     from .models import User
@@ -77,6 +79,16 @@ def get_notifications():
             reports = len(Song.query.filter_by(state="r").all()) + len(Thread.query.filter_by(state="r").all()) + len(ThreadPost.query.filter_by(state="r").all()) + len(SongContent.query.filter_by(state="r").all()) + len(UserPost.query.filter_by(state="r").all())
             edits = 0 # NOTE: PENDING
             help = len(Help.query.all())
-        return dict(n_help = help, n_edit = edits, n_report = reports, n_notification = len(current_user.getNotifications(seen=False)))
+        return dict(n_help = help, n_edit = edits, n_report = reports, n_notification = len(current_user.getNotifications(seen=False)), current_page=format_current_path(request.path))
     except:
-        return dict(n_help=0, n_edit=0, n_report=0, n_notification=0)
+        return dict(n_help=0, n_edit=0, n_report=0, n_notification=0, current_page=format_current_path(request.path))
+    
+
+def format_current_path(path):
+    '''Returns a formatted string to be used in the navbar to show which tab is currently active'''
+    pages = ["discover", "learn", "social", "profile", "help", "auth", "admin"]
+    if path == "/mh/":
+        return "home"
+    for page in pages:
+        if page in path:
+            return page

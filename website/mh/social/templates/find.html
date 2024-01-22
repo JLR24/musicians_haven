@@ -1,0 +1,26 @@
+{% extends "social_base.html" %}
+
+{% block title %} Find Users {% endblock %}
+
+{% block content %}
+
+    <h1>Search for Users</h1><br>
+
+    <form method="GET">
+        <div class="input-group">
+            <input type="text" name="search" placeholder="Enter for a user..." required autofocus class="required form-control" {% if search %} value="{{search}}" {% endif %}>
+            <a href="/mh/social/" class="btn btn-outline-danger">Clear</a>
+            <input type="submit" class="btn btn-outline-success" value="Search">
+        </div>
+    </form><hr>
+
+    {% if results | length > 0 %}
+        <h2>Results:</h2>
+        <ul>
+        {% for result in results %}
+            <li><a href="/mh/social/profile/{{result.id}}">{{result.username}} {% if result.name %}({{result.name}}){% endif %}: [Display Icon: {{result.icon}}]</a></li>
+        {% endfor %}
+        </ul>
+    {% endif %}
+
+{% endblock %}
