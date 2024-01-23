@@ -1,0 +1,23 @@
+{% extends "profile_base.html" %}
+
+{% block title %} {{user.username}} - Upload Post {% endblock %}
+
+{% block content %}
+
+    <h1>Upload a Post</h1>
+    <small class="text-muted"><a href="/mh/profile/">&lt;&lt; Back to profile page</a></small><br>
+
+    <form class="formList" method="POST" action="{{url_for('profile.HandlePostUpload')}}" enctype="multipart/form-data">
+        <div class="mb-3">
+            <label class="form-label">Upload your photo: </label>
+            <input type="file" name="file" required accept="image/*">
+        </div>
+
+        <div class="form-group">
+            <label for="caption">Optionally, enter a caption for your post.</label>
+            <input type="text" class="form-control" name="caption" placeholder="Enter an optional caption...">
+        </div>
+        <input type="submit" class="btn btn-outline-success" value="Upload Post">
+    </form>
+
+{% endblock %}

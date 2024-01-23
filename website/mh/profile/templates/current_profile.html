@@ -94,11 +94,12 @@
 
         <div id="posts_content" name="tab_content" style="display: none;" class="tabContent">
             <div style="text-align: center;">
-                {% if user.getPosts() %}
+                <a href="/mh/profile/post">Make a post.</a>
+                {% if user.getPosts() | length > 0 %}
                     {% for post in user.getPosts() %}
                         <div class="outer0">
                             <div class="inner">
-                                <div class="image"><img class="p-img" src=""></div>
+                                <div class="image"><img class="p-img" src="{{url_for('profile.static', filename=('user_static/' + post.user | string + '/' + post.filepath))}}"></div>
                                 <p data-toggle="tooltip" data-placement="top" title="Date posted: {{post.date.strftime('%d/%m/%Y, %H:%M')}}" style="font-size: 15px; letter-spacing: 2px; text-overflow: ellipsis;">
                                     <a href="/mh/profile/{{post.user}}#{{post.id}}">{{user.username}}:</a> {{post.caption}}
                                 </p>
@@ -106,7 +107,7 @@
                         </div>
                     {% endfor %}
                 {% else %}
-                    <p>This user has not made any posts yet.</p>
+                    <p>You have not made any posts yet.</p>
                 {% endif %}
             </div>
         </div>
@@ -132,5 +133,14 @@
             document.getElementById(value + "_tab").setAttribute("class", "profileTab activeTab");
             document.getElementById(value + "_content").setAttribute("style", "color: display: block;");
         }  
+
+        // Popup posting form. Source: https://www.w3schools.com/howto/howto_js_popup_form.asp
+        function openForm() {
+            document.getElementById("postForm").style.display = "block";
+        }
+
+        function closeForm() {
+            document.getElementById("postForm").style.display = "none";
+        }
     </script>
 {% endblock %}

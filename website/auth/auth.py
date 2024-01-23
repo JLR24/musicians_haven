@@ -1,6 +1,6 @@
 from flask import Blueprint, render_template, url_for, redirect, flash, request, session
 from flask_login import current_user, login_required, logout_user, login_user
-from .static.auth_utilities import is_logged_in, get_user, get_redirect_address, check_user, send_signup_token, generate_token, check_token, add_user
+from .static.auth_utilities import is_logged_in, get_user, get_redirect_address, check_user, send_signup_token, generate_token, check_token, add_user, create_upload_folder
 from werkzeug.security import check_password_hash
 from ..models import User
 
@@ -36,6 +36,7 @@ def Validate(token):
         session.clear()
         return redirect(url_for("auth.Signup"))
     user = add_user()
+    create_upload_folder(user.id)
     session.clear()
     login_user(user, remember=True)
     flash(f"Account created successfully. Welcome, {user.username}! Make sure to update your profile and settings.", category="success")

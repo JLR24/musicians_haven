@@ -1,8 +1,11 @@
-from flask import Blueprint, render_template, url_for, redirect, flash, request
+from flask import Blueprint, render_template, url_for, redirect, flash, request, current_app
 from flask_login import current_user, login_required
-from ...models import db, UserInstrument, UserGenre, Notification
+from ...models import db, UserInstrument, UserGenre, Notification, UserPost
 from .static.file_reader import get_instruments, get_cities, get_countries, get_genres
 import datetime
+import os
+from uuid import uuid4
+from werkzeug.utils import secure_filename
 
 profile = Blueprint("profile", __name__, template_folder="templates", static_folder="static")
 
@@ -44,6 +47,13 @@ def Settings():
 def Notifications():
     '''Displays the user's notifications'''
     return render_template("notifications.html", user=current_user, active="Notifications")
+
+
+@profile.route("/post")
+@login_required
+def Post():
+    '''Allows the user to upload a post.'''
+    return render_template("post.html", user=current_user, active="Home")
 
 
 @profile.route("/HandleName", methods=["POST"])
@@ -207,3 +217,31 @@ def HandleNotification():
         db.session.delete(notif)
     db.session.commit()
     return redirect(url_for("profile.Notifications"))
+
+
+@profile.route("/HandlePostUpload", methods=["POST"])
+@login_required
+def HandlePostUpload():
+    '''Handles the form submission when the user uploads a new post'''
+    if 'file' not in request.files or request.files["file"].filename == "":
+        flash("No file given.", category="error")
+        return redirect(url_for("profile.Post"))
+    file = request.files["file"]
+    caption = request.form.get("caption")
+    filename = secure_filename(file.filename)
+    try:
+        unique_filename = f"{uuid4().__str__()}-{filename}"
+        file.save(os.path.join(current_app.config["UPLOAD_FOLDER"] + f"{current_user.id}/", unique_filename))
+        db.session.add(UserPost(
+            user = current_user.id, 
+            filepath = unique_filename,
+            caption = caption,
+            state = "valid"
+        ))
+        db.session.commit()
+        flash("Post added!", category="success")
+    except Exception as e:
+        flash("Unknown error. Please try again...", category="error")
+        print(str(e))
+        return redirect(url_for("profile.Post"))
+    return redirect(url_for("profile.Current"))

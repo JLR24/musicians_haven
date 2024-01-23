@@ -1,6 +1,7 @@
 from . import db
 from flask_login import UserMixin
 from sqlalchemy.sql import func
+from flask import url_for
 
 ### USER ###
 
@@ -22,7 +23,7 @@ class User(db.Model, UserMixin):
 
     def getPosts(self):
         '''Returns a list of the user's posts ordered by date.'''
-        return (sorted(UserPost.query.filter_by(user=self.id).all(), key=lambda i: i.date)).reverse()
+        return list(reversed(sorted(UserPost.query.filter_by(user=self.id).all(), key=lambda i: i.date)))
     
     def getFriendLinks(self):
         '''Returns a list of friend links.'''
@@ -104,7 +105,7 @@ class UserSetting(db.Model):
     account_settings = db.Column(db.String(64)) # 1 for yes, 0 for no:
     '''
     Account Settings:
-     - [0]: Show name
+     - [0]: Show date of birth (profile)
      - [1]: Show location
      - [2]: Show place of work
      - [3]: Show age (for bands)
@@ -196,6 +197,11 @@ class UserPost(db.Model):
     date = db.Column(db.DateTime(timezone=True), default=func.now())
     caption = db.Column(db.String(4096))
     state = db.Column(db.String(16))
+
+    def getPath(self):
+        '''Returns the path for the file to be rendered from HTML files.'''
+        # return url_for("user_static", filename=f"{self.user}/{self.filepath}")
+        return f"user_static/{self.user}/{self.filepath}"
 
 
 ### MESSAGING ###

@@ -6,7 +6,7 @@ from flask import flash, current_app, session, render_template, redirect, url_fo
 from itsdangerous import URLSafeTimedSerializer
 from werkzeug.security import generate_password_hash
 from werkzeug.urls import url_parse
-from os import getenv
+from os import getenv, mkdir, path
 
 
 def is_logged_in():
@@ -98,3 +98,8 @@ def get_redirect_address():
     if not args or url_parse(args).netloc != "":
         args = url_for("mh.Home") # As a default, if no valid arguments are present
     return args
+
+
+def create_upload_folder(id):
+    '''This function adds a folder for the user in the /user_static folder.'''
+    mkdir(path.join(current_app.config["UPLOAD_FOLDER"], str(id)))

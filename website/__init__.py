@@ -17,6 +17,7 @@ def create_app():
     app.config["SQLALCHEMY_DATABASE_URI"] = f"sqlite:///{DB_NAME}"
     app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
     app.config["SECURITY_PASSWORD_SALT"] = os.getenv("SECURITY_PASSWORD_SALT")
+    app.config["UPLOAD_FOLDER"] = "website/mh/profile/static/user_static"
     db.init_app(app)
     migrate = Migrate(app, db)
 
